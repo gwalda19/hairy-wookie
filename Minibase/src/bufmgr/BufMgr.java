@@ -80,7 +80,6 @@ public class BufMgr implements GlobalConst {
   public void pinPage(PageId pageno, Page mempage, int contents) { 
   
     //System.out.println("\nPinning PageId: " + pageno);
-  
     Integer FrameNum = hm.get(pageno.pid);
     if (FrameNum == null)
     {
