@@ -2,7 +2,7 @@ package bufmgr;
 
 /**
  *
- * @author Bill
+ * @author Not Bill
  */
 class Clock extends Replacer
 {
