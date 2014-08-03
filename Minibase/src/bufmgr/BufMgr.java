@@ -25,19 +25,9 @@ import java.util.Map;
  */
 public class BufMgr implements GlobalConst {
 
-  // This is the array of frames (it contains pages)
   Page[] buffer_pool;
-  
-  // This is the array of descripters for the frames
   FrameDesc[] frametab;
-  
-  // Instead of having to search thru the hashmap looking for the
-  // page that the frame mapped to previously (and removing it) every
-  // single time we add a new mapping, we are keep two hashmaps to do
-  // this much more efficiently.
-  HashMap<Integer, Integer> Page2Frame;
-  HashMap<Integer, Integer> Frame2Page;
-  
+  HashMap<Integer, Integer> hm; 
   Clock replPolicy;
     
   /**
@@ -47,7 +37,6 @@ public class BufMgr implements GlobalConst {
    */
   public BufMgr(int numframes) {
 
-    // Initialize everything
     buffer_pool = new Page[numframes];
     frametab = new FrameDesc[numframes];
     for (int i=0; i<frametab.length; i++)
@@ -57,8 +46,7 @@ public class BufMgr implements GlobalConst {
     }
 
     replPolicy = new Clock(this); 
-    Page2Frame = new HashMap<>();
-    Frame2Page = new HashMap<>();
+    hm = new HashMap<>();
   } // public BufMgr(int numframes)
 
   /**
@@ -91,20 +79,18 @@ public class BufMgr implements GlobalConst {
    */
   public void pinPage(PageId pageno, Page mempage, int contents) { 
   
-    // See if the page already is mapped into a frame
-    Integer FrameNum = Page2Frame.get(pageno.pid);
+    //System.out.println("\nPinning PageId: " + pageno);
+    Integer FrameNum = hm.get(pageno.pid);
     if (FrameNum == null)
     {
-      // There is no mapping for this page, go find a frame it can
-      // live in.
+      //System.out.println("Not in Buffer Pool");
       int framenum = replPolicy.pickVictim();
       if (framenum != -1)
       {
-        // Found a frame for the page to live in
+        //System.out.println("Putting in Frame: " + framenum);
         if ((frametab[framenum].valid) && (frametab[framenum].dirty))
         {
-          // The frame had a page in it that became dirty,
-          // so write it out to the disk before using the frame.
+          //System.out.println("Frame dirty, writing to disk");
           Minibase.DiskManager.write_page(frametab[framenum].pageno, buffer_pool[framenum]);
         }
 
@@ -112,9 +98,7 @@ public class BufMgr implements GlobalConst {
         {
           case PIN_DISKIO:
           {
-            // Get the page from disk first, copy it into the frame in the
-            // buffer pool, set mempage to refer to it, update the frame
-            // descripters and update the hashmap.
+            //System.out.println("PIN_DISKIO");
             Page diskpage = new Page();
             Minibase.DiskManager.read_page(pageno, diskpage);
             buffer_pool[framenum].copyPage(diskpage);
@@ -122,64 +106,55 @@ public class BufMgr implements GlobalConst {
             frametab[framenum].pin_count++;  
             frametab[framenum].valid = true; 
             frametab[framenum].pageno = new PageId(pageno.pid); 
-            addToHashMap(pageno.pid, framenum);
+            updateHashMap(hm, pageno.pid, framenum);
             break;        
           }
           case PIN_MEMCPY:
           {
-            // Copy page in mempage into the frame in the buffer pool,
-            // set mempage to refer to it, update the frame descripters
-            // and update the hashmap.
+            //System.out.println("PIN_MEMCPY");
             buffer_pool[framenum].copyPage(mempage);  
             mempage.setPage(buffer_pool[framenum]);
             frametab[framenum].pin_count++;  
             frametab[framenum].valid = true;  
             frametab[framenum].pageno = new PageId(pageno.pid); 
-            addToHashMap(pageno.pid, framenum);
+            updateHashMap(hm, pageno.pid, framenum);
             break;        
           }
           case PIN_NOOP:
           {
-            // This currently does nothing and is not called
+            //System.out.println("PIN_NOOP");
             break;      
           }
           default:
           {
-            // Received an invalid operation
             throw new IllegalArgumentException();
           }
         }
       }
       else
       {
-        // Buffer pool is completely full and there are no slots that
-        // can be reclaimed.  Very bad news.
         throw new IllegalStateException(); 
       }
     }
     else
     {
-      // The page is already mapped to a frame.  Pin it and set
-      // mempage to refer to it.
+      //System.out.println("Already in Buffer Pool");
       frametab[FrameNum].pin_count++;  
       mempage.setPage(buffer_pool[FrameNum]);
     }
   } // public void pinPage(PageId pageno, Page page, int contents)
   
-  private void addToHashMap(Integer Page, Integer Frame)
-  {
-    Integer oldPage = Frame2Page.get(Frame);
-    if (oldPage != null)
-    {
-      // This frame was mapped to a previous page
-      // so remove old entries from both hashmaps. 
-      Page2Frame.remove(oldPage);
-      Frame2Page.remove(Frame);
-    }
+  private void updateHashMap(HashMap<Integer, Integer> hm, int pid, int framenum) {
     
-    // Update (add to) both hashmaps
-    Page2Frame.put(Page, Frame);
-    Frame2Page.put(Frame, Page);
+    for (Map.Entry<Integer, Integer> entry : hm.entrySet()) {
+      if (entry.getValue() == framenum)
+      {
+        hm.remove(entry.getKey());
+        break;
+      }
+    }      
+
+    hm.put(pid, framenum);
   }
   
   /**
@@ -192,19 +167,21 @@ public class BufMgr implements GlobalConst {
    */
   public void unpinPage(PageId pageno, boolean dirty) {
       
-    Integer FrameNum = Page2Frame.get(pageno.pid);
+    //System.out.println("\nUnpinning PageId: " + pageno);
+    //System.out.println("Dirty is: " + dirty);
+    Integer FrameNum = hm.get(pageno.pid);
     if ((FrameNum == null) || frametab[FrameNum].pin_count == 0)
     {
-      // We were told to unpin a page that was either not in the 
-      // buffer pool or not even pinned.
       throw new IllegalArgumentException();      
     }
     else
     {
-      // Set dirty flag to requested state and adjust
-      // the pin count.
       frametab[FrameNum].dirty = dirty;
       frametab[FrameNum].pin_count--;
+      if (frametab[FrameNum].pin_count == 0)
+      {
+        frametab[FrameNum].refbit = true;
+      }
     }
   } // public void unpinPage(PageId pageno, boolean dirty)
   
@@ -223,23 +200,18 @@ public class BufMgr implements GlobalConst {
 
     if (getNumUnpinned() == 0)
     {
-      // Buffer pool is already full with unpinned pages
       throw new IllegalStateException();   
     }
     else
     {
-      // Allocate the disk pages, return id of first page
       PageId pageno = Minibase.DiskManager.allocate_page(run_size);
-      
-      Integer FrameNum = Page2Frame.get(pageno.pid);
+      Integer FrameNum = hm.get(pageno.pid);
       if ((FrameNum != null) && (frametab[FrameNum].pin_count > 0))
       {
-        // The first page is already mapped into the buffer pool and pinned
         throw new IllegalArgumentException(); 
       }
       else
       {
-        // Pin the first page and return its page id
         pinPage(pageno, firstpg, PIN_MEMCPY);
         return pageno;
       }
@@ -254,16 +226,13 @@ public class BufMgr implements GlobalConst {
    */
   public void freePage(PageId pageno) {
 
-    Integer FrameNum = Page2Frame.get(pageno.pid);
+    Integer FrameNum = hm.get(pageno.pid);
     if ((FrameNum != null) && (frametab[FrameNum].pin_count > 0))
     {
-      // The page is mapped into the buffer pool and pinned,
-      // so we can't free it.
       throw new IllegalArgumentException();
     }
     else
     {
-      // Deallocate the requested disk page
       Minibase.DiskManager.deallocate_page(pageno);
     }
   } // public void freePage(PageId firstid)
@@ -280,7 +249,6 @@ public class BufMgr implements GlobalConst {
     {
       if ((frametab[i].valid) && (frametab[i].dirty))
       {
-        // Only flush frames that have valid pages that are dirty
         flushPage(frametab[i].pageno);    
       }
     }
@@ -294,15 +262,17 @@ public class BufMgr implements GlobalConst {
    */
   public void flushPage(PageId pageno) {
     
-    Integer FrameNum = Page2Frame.get(pageno.pid);
+    //System.out.println("\nFlushing PageId: " + pageno);
+    Integer FrameNum = hm.get(pageno.pid);
     if (FrameNum != null)
     {
-      // Write the page to disk
-      Minibase.DiskManager.write_page(pageno, buffer_pool[FrameNum]);
+      if (frametab[FrameNum].dirty)
+      {
+        Minibase.DiskManager.write_page(pageno, buffer_pool[FrameNum]);
+      }
     }
     else
     {
-       // The page is not even in the buffer pool
        throw new IllegalArgumentException();   
     }
   }
