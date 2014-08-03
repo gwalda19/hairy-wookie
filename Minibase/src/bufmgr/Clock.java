@@ -39,26 +39,34 @@ class Clock extends Replacer
     {
         boolean found = false;
         
+        // Go thru all the frames at most twice
         for (int i=0; i<(frametab.length*2); i++)
         {
             if (!frametab[counter].valid)
             {
+                // Any invalid (no data) frames are choosen first
                 found = true;
                 break;
             }
             else if (frametab[counter].pin_count == 0)
             {
+                // This frame is not pinned
                 if (!frametab[counter].refbit)
                 {
+                    // Found unpinned that has not been referenced
+                    // recently
                     found = true;
                     break;
                 }
                 else
                 {
+                    // Don't choose this, set reference bit and
+                    // keep going
                     frametab[counter].refbit = false;                 
                 }
             }
             
+            //0, 1, 2 ... 99
             counter = (counter + 1) % frametab.length;
         }
         
@@ -68,6 +76,7 @@ class Clock extends Replacer
         }
         else
         {
+            // Could not find a frame, return error
             return -1;
         }
     }
