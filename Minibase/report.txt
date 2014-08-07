@@ -14,6 +14,9 @@ File Descriptions:  "List any new files you have created and briefly explain the
 Division of Labor:
     Describe how you divided the work, i.e. which group member did what.
     Please also include how much time each of you spent on this project.
+   
+    We began by having everyone read the chapter and get themselves familiar with how the buffer manager should work. We also had to read up on how the clock replacement policy should get implemented. The following is the individual break down of time spent and project responsibilities.
+
     
     William Annocki - Coded up the blah blah and spent X hours working on it.
     David Shanline  - Coded up the clock replacement policy. Spent XX hours on it.
