@@ -1,1 +1,8 @@
-This is where we can put the description of the work we did and other things we need to turn in.
+Overall Status
+  Give a brief overview of how you implemented the major components. If you were unable to finish any portion of the project, please give any details about what is completed and your understanding of what is not. (This information is useful when determining partial credit.)
+
+File Descriptions
+    List any new files you have created and briefly explain their major functions and/or data structures.
+
+Division of Labor
+    Describe how you divided the work, i.e. which group member did what. Please also include how much time each of you spent on this project.
