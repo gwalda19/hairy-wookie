@@ -1,9 +1,9 @@
-Overall Status
-Give a brief overview of how you implemented the major components.
+Overall Status:  "Give a brief overview of how you implemented the major components."
 
 
-File Descriptions:
-List any new files you have created and briefly explain their major functions and/or data structures.
+File Descriptions:  "List any new files you have created and briefly explain their major functions and/or data structures."
+
+  The following is a list and description of each file that we had to create or update. 
 
     Clock.java - 
     
