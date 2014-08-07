@@ -14,3 +14,10 @@ File Descriptions:  "List any new files you have created and briefly explain the
 Division of Labor:
     Describe how you divided the work, i.e. which group member did what.
     Please also include how much time each of you spent on this project.
+    
+    William Annocki - Coded up the blah blah and spent X hours working on it.
+    David Shanline  - Coded up the clock replacement policy. Spent XX hours on it.
+    Michael Norris  - 
+    Sean Fast       -
+    David Gwalthney - Wrote up the report.txt, helped debug the program, and setup the initial GitHub repository. Spent about XX hours.
+    
