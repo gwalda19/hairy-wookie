@@ -20,11 +20,10 @@ Division of Labor:
     to go over what has been completed and what still needs to be implemented. The following is the individual break
     down of time spent and project responsibilities.
 
-    
     William Annocki - Coded up the blah blah and spent X hours working on it.
     David Shanline  - Coded up the clock replacement policy. Spent XX hours on it.
     Michael Norris  - 
     Sean Fast       -
-    David Gwalthney - Wrote up the report.txt, helped debug the program, and setup the initial GitHub repository.
-                      Spent about XX hours.
+    David Gwalthney - Helped integrate the code and flush out any issues that came up. Also setup the initial GitHub
+                      repository that housed the group code. Spent about 24 hours.
     
