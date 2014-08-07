@@ -5,12 +5,12 @@ File Descriptions:  "List any new files you have created and briefly explain the
 
   The following is a list and description of each file that we had to create or update. 
 
-    Clock.java - 
+    Clock.java - This was implemented to take care of the replacement policy that the buffer manager uses. 
     
     FrameDesc.java - 
     
     BufMgr.java - 
 
-Division of Labor
+Division of Labor:
     Describe how you divided the work, i.e. which group member did what.
     Please also include how much time each of you spent on this project.
