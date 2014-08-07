@@ -16,8 +16,9 @@ Division of Labor:
     Please also include how much time each of you spent on this project.
    
     We began by having everyone read the chapter and get themselves familiar with how the buffer manager should work.
-    We also had to read up on how the clock replacement policy should get implemented. The following is the individual
-    break down of time spent and project responsibilities.
+    We also had to read up on how the clock replacement policy should get implemented. We would meet briefly after class
+    to go over what has been completed and what still needs to be implemented. The following is the individual break
+    down of time spent and project responsibilities.
 
     
     William Annocki - Coded up the blah blah and spent X hours working on it.
