@@ -1,8 +1,9 @@
 Overall Status
-  Give a brief overview of how you implemented the major components.
+Give a brief overview of how you implemented the major components.
 
 
-File Descriptions: List any new files you have created and briefly explain their major functions and/or data structures.
+File Descriptions:
+List any new files you have created and briefly explain their major functions and/or data structures.
 
     Clock.java - 
     
@@ -11,4 +12,5 @@ File Descriptions: List any new files you have created and briefly explain their
     BufMgr.java - 
 
 Division of Labor
-    Describe how you divided the work, i.e. which group member did what. Please also include how much time each of you spent on this project.
+    Describe how you divided the work, i.e. which group member did what.
+    Please also include how much time each of you spent on this project.
