@@ -10,6 +10,17 @@ File Descriptions:  "List any new files you have created and briefly explain the
     FrameDesc.java - 
     
     BufMgr.java - 
+    
+    	pinPage: This function increments the pin count of a page in the buffer pool. If the page is not yet in
+    	the buffer pool, then it uses the replacement policy (the pickVictim method of the clock class in this case) 
+    	to select a frame to replace and adds the disk page to that frame and then pins it. It will also write the 
+    	replaced victim page in the frame to disk if the page residing in it was marked "dirty". If all pages in the 
+    	buffer pool are currently pinned then none can be replaced and an exception is thrown. 
+    	
+    	unpinPage: This function takes a frame in the buffer pool and decrements its pin count, while marking its
+    	dirty bit to the boolean value passed in as a parameter. If the pin count was already at zero when the function
+    	attempts to unpin it further, we throw an exception. An exception is also thrown if the page requested to be
+    	unpinned is not in the buffer pool to begin with. 
 
 Division of Labor:
     Describe how you divided the work, i.e. which group member did what.
@@ -17,13 +28,20 @@ Division of Labor:
    
     We began by having everyone read the chapter and get themselves familiar with how the buffer manager should work.
     We also had to read up on how the clock replacement policy should get implemented. We would meet briefly after class
-    to go over what has been completed and what still needs to be implemented. The following is the individual break
+    to go over what has been completed and what still needs to be implemented. 
+    
+    The BufMgr class was implemented by Bill Annocki, Mike Norris, & Sean Fast. The Clock and FrameDesc classes were 
+    implemented by Dave Gwalthney and Dave Shanline. The integration with Github and Eclipse was set up by Dave Gwalthney & 
+    Dave Shanline.
+    
+    ------------------------------------
+    The following is the individual break
     down of time spent and project responsibilities.
 
     William Annocki - Coded up the blah blah and spent X hours working on it.
     David Shanline  - Coded up the clock replacement policy. Spent XX hours on it.
     Michael Norris  - 
-    Sean Fast       -
+    Sean Fast       - 
     David Gwalthney - Helped integrate the code and flush out any issues that came up. Also setup the initial GitHub
                       repository that housed the group code. Spent about 24 hours.
     
