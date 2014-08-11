@@ -34,7 +34,7 @@ Division of Labor:
     implemented by Dave Gwalthney and Dave Shanline. The integration with Github and Eclipse was set up by Dave Gwalthney & 
     Dave Shanline.
     
-    ------------------------------------
+    ---------------------------------------
     The following is the individual break
     down of time spent and project responsibilities.
 
