@@ -10,7 +10,14 @@ File Descriptions:  "List any new files you have created and briefly explain the
     FrameDesc.java - 
     
     BufMgr.java - 
-    
+    	The BufMgr is the main class used and implemented in project 1.  The constructor of the BufMgr is used 
+    	to initialize the buffer pool as an array of Page objects. Each object is called a Frame.  As a parameter 
+    	the BufMgr constructor takes in the number of frames that will be in the buffer pool.  The constructor 
+    	also creates two hashmaps: one that maps pages to frames and the other that maps frames to pages.  
+    	Instead of having to search thru the hashmap looking for the page that the frame mapped to 
+    	previously (and removing it) every single time we add a new mapping, we are keep two hashmaps to do 
+    	this much more efficiently.  The BufMgr determines, very efficiently, what frame a given disk page occupies.
+    	
     	pinPage: This function increments the pin count of a page in the buffer pool. If the page is not yet in
     	the buffer pool, then it uses the replacement policy (the pickVictim method of the clock class in this case) 
     	to select a frame to replace and adds the disk page to that frame and then pins it. It will also write the 
@@ -21,6 +28,31 @@ File Descriptions:  "List any new files you have created and briefly explain the
     	dirty bit to the boolean value passed in as a parameter. If the pin count was already at zero when the function
     	attempts to unpin it further, we throw an exception. An exception is also thrown if the page requested to be
     	unpinned is not in the buffer pool to begin with. 
+    	
+    	newPage(): The function newPage() allocates a run of new disk pages and pins the first one in the buffer pool. 
+    	This method first checks the number of unpinned pages to ensure there are available slots in the buffer pool.  
+    	This method then allocates the number of disk pages passed in as a parameter. The BufMgr checks if the first page 
+    	is already mapped into the buffer pool and pinned. If not, it pins the first page and returns its page ID.
+    	
+    	freePage(): The method freePage() deallocates a single page from disk and freeing it from the buffer pool if needed.  
+    	This function takes in a PageId object as parameter to identify the exact page to free from the buffer pool.  
+    	The page ID is used to access the frame number and check if the page is already pinned. If the page is currently 
+    	pinned then the page cannot be freed from the buffer pool.
+    	
+    	flushAllPage(): The method flushAllPages() writes all the valid and dirty frames to disk. This function is similar 
+    	to flushPage() except for this method writes all pages to the disk.  The function loops through and finds all the 
+    	valid pages that have their dirty bit set and flushes those pages.
+    	
+    	flushPage(): The method flushPage() writes a page in the buffer pool to disk if that page is dirty. This function 
+    	takes in a PageId object as parameter to identify the exact page to flush from the buffer manager. This function 
+    	uses the page number to access the frame number and then writes that page to disk.
+    	
+    	getNumBuffers(): The method getNumBuffers() get the total number of buffer frames. This function returns the number 
+    	of frames in the buffer pool.
+    	
+    	getNumUnpinned(): The method getNumUnpinned() gets the total number of unpinned buffer frames in the BufMgr.  
+    	To determine the number of unpinned buffer frames, the BufMgr loops through the entire frame table and counts 
+    	all the empty unpinned buffer frames.
 
 Division of Labor:
     Describe how you divided the work, i.e. which group member did what.
