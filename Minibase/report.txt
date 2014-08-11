@@ -24,6 +24,9 @@ File Descriptions:  "List any new files you have created and briefly explain the
     	replaced victim page in the frame to disk if the page residing in it was marked "dirty". If all pages in the 
     	buffer pool are currently pinned then none can be replaced and an exception is thrown. 
     	
+        addToHashMap: This function is used to add entries to the two hashmaps.  See the notes at the end of this
+        report for a detailed explanation of the double hashmap implementation.
+
     	unpinPage: This function takes a frame in the buffer pool and decrements its pin count, while marking its
     	dirty bit to the boolean value passed in as a parameter. If the pin count was already at zero when the function
     	attempts to unpin it further, we throw an exception. An exception is also thrown if the page requested to be
@@ -66,6 +69,74 @@ Division of Labor:
     implemented by Dave Gwalthney and Dave Shanline. The integration with Github and Eclipse was set up by Dave Gwalthney & 
     Dave Shanline.
     
+Notes:
+    *** Using 2 HashMaps to improve performance ***
+    
+    Example: Assume 20 Pages and 5 Frames
+
+    - Current contents of HashMap
+
+    PageId  FrameNum
+    ------  --------
+    7       2
+    16      1
+    3       0 
+    1       3
+    10      4
+
+    - suppose we need to add PageId 4 into the buffer pool
+    - and pickVictim() chooses FrameNum 0 because it's unpinned (has PageId 3 in it)
+    - now we would get this
+
+    PageId  FrameNum
+    ------  --------
+    7       2
+    16      1
+    3       0  *
+    1       3
+    10      4
+    4       0  *
+
+    - we cannot have this (i.e. more than one PageId mapped to the same FrameNum)
+    - the <3, 0> entry should be deleted/removed before the <4, 0> entry is added
+    - so how do we find this entry given only the FrameNum ?  
+    - unfortunately since FrameNum is not the key we would need to interate the HashMap
+    - if you need to iterate a HashMap potentially everytime you add an entry (no advantage to HashMap)
+
+    - Current content of HashMaps (using 2)
+
+    PageId2FrameNum         FrameNum2PageId
+    PageId  FrameNum        FrameNum  PageId	
+    ------  --------        --------  ------
+    7       2               2         7
+    16      1               1         16
+    3       0               0         3
+    1       3               3         1
+    10      4               4         10
+
+    - suppose we need to add PageId 4 into the buffer pool
+    - and pickVictim() chooses FrameNum 0 because it's unpinned (has PageId 3 in it)
+    - now we can do this when adding <4, 0>
+
+    PageId2FrameNum.remove(FrameNum2PageId.get(0));  // We can now avoid iterating here (very expensive) !!!
+    FrameNum2PageId.remove(0);
+    PageId2FrameNum.put(4, 0);                       // At the expense of doing 
+    FrameNum2PageId.put(0, 4);                       // this extra put (minor expense) each time                       
+
+    - and, now we get this
+
+    PageId2FrameNum         FrameNum2PageId
+    PageId  FrameNum        FrameNum  PageId	
+    ------  --------        --------  ------
+    7       2               2         7
+    16      1               1         16
+    1       3               3         1
+    10      4               4         10
+    4       0               0         4
+
+    *** Using 2 HashMaps to improve performance ***
+
+
     ---------------------------------------
     The following is the individual break
     down of time spent and project responsibilities.
