@@ -1,4 +1,4 @@
-Overall Status:  "Give a brief overview of how you implemented the major components."
+Overall Status:  
 	This implementation of BufMgr is 100% complete and passes all the tests from the BMTest  test driver as required.  
 	We started off the project by spending some time becoming familiar with GitHUb , so that we could use it as a 
 	version control system for the project.   During implementation, the first components that we found that we needed 
@@ -10,7 +10,7 @@ Overall Status:  "Give a brief overview of how you implemented the major compone
 	the overall performance.
 
 
-File Descriptions:  "List any new files you have created and briefly explain their major functions and/or data structures."
+File Descriptions:  
 
   The following is a list and description of each file that we had to create or update. 
 
@@ -76,15 +76,13 @@ File Descriptions:  "List any new files you have created and briefly explain the
     	all the empty unpinned buffer frames.
 
 Division of Labor:
-    Describe how you divided the work, i.e. which group member did what.
-    Please also include how much time each of you spent on this project.
    
     We began by having everyone read the chapter and get themselves familiar with how the buffer manager should work.
     We also had to read up on how the clock replacement policy should get implemented. We would meet briefly after class
     to go over what has been completed and what still needs to be implemented. 
     
-    The BufMgr class was implemented by Bill Annocki, Mike Norris, & Sean Fast. The Clock and FrameDesc classes were 
-    implemented by Dave Gwalthney and Dave Shanline. The integration with Github and Eclipse was set up by Dave Gwalthney & 
+    The BufMgr class was implemented by Bill Annocki, Mike Norris, & Sean Fast (45 hours). The Clock and FrameDesc classes were 
+    implemented by Dave Gwalthney and Dave Shanline (30 hours). The integration with Github and Eclipse was set up by Dave Gwalthney & 
     Dave Shanline.
     
 Notes:
@@ -155,14 +153,4 @@ Notes:
     *** Using 2 HashMaps to improve performance ***
 
 
-    ---------------------------------------
-    The following is the individual break
-    down of time spent and project responsibilities.
-
-    William Annocki - Coded up the blah blah and spent X hours working on it.
-    David Shanline  - Coded up the clock replacement policy. Spent XX hours on it.
-    Michael Norris  - 
-    Sean Fast       - 
-    David Gwalthney - Helped integrate the code and flush out any issues that came up. Also setup the initial GitHub
-                      repository that housed the group code. Spent about 24 hours.
-    
+   
