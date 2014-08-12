@@ -4,7 +4,9 @@ import global.PageId;
 
 /**
  *
- * @author Bill
+ *  @author David Shanline
+ *  @author David Gwalthney
+ *
  */
 class FrameDesc
 {
