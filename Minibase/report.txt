@@ -1,4 +1,13 @@
 Overall Status:  "Give a brief overview of how you implemented the major components."
+	This implementation of BufMgr is 100% complete and passes all the tests from the BMTest  test driver as required.  
+	We started off the project by spending some time becoming familiar with GitHUb , so that we could use it as a 
+	version control system for the project.   During implementation, the first components that we found that we needed 
+	were the FrameDesc class and the pickVictim method of the Clock (Replacer) class.   This enabled us to then focus 
+	our attention on the implementations of the pinPage and unpinPage methods of BufMgr.   As these methods matured, 
+	we then started to focus on the remaining supporting methods in the BufMgr class that we needed.   We spent some 
+	time fixing some general issues and eventually were able to pass all tests successfully.   One of the last things 
+	we did, was to go back in and revisit/refine the way that we were using the HashMap so that could improve/optimize 
+	the overall performance.
 
 
 File Descriptions:  "List any new files you have created and briefly explain their major functions and/or data structures."
