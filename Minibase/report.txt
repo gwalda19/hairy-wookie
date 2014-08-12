@@ -6,7 +6,7 @@ Overall Status:  "Give a brief overview of how you implemented the major compone
 	our attention on the implementations of the pinPage and unpinPage methods of BufMgr.   As these methods matured, 
 	we then started to focus on the remaining supporting methods in the BufMgr class that we needed.   We spent some 
 	time fixing some general issues and eventually were able to pass all tests successfully.   One of the last things 
-	we did, was to go back in and revisit/refine the way that we were using the HashMap so that could improve/optimize 
+	we did, was to go back in and revisit/refine the way that we were using the HashMap so that we could improve/optimize 
 	the overall performance.
 
 
