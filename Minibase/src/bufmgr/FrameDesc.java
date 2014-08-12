@@ -15,7 +15,8 @@ import global.PageId;
  *  example information relevant to the replacement algorithm.
  * 
  *  The below class stores the states as described above. This is the frame
- *  table.
+ *  table. The members are protected so that they can be used by elements
+ *  residing in its own class or classes in the same package.
  * 
  */
 class FrameDesc
@@ -26,6 +27,12 @@ class FrameDesc
     protected boolean refbit;
     protected PageId pageno; 
 
+
+   /**
+    *
+    * Constructs a frame descriptor by initializing member data.  
+    *
+    */
     public FrameDesc()
     {
         dirty = false;
