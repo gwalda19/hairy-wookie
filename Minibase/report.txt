@@ -7,7 +7,16 @@ File Descriptions:  "List any new files you have created and briefly explain the
 
     Clock.java - This was implemented to take care of the replacement policy that the buffer manager uses. 
     
-    FrameDesc.java - 
+    FrameDesc.java -
+    	This is a class that is setup to be a data structure to hold the frame descriptions. This class has all
+    	protected member variables so that they can be used by elements residing in its own class or classes in
+    	the same package.
+
+      Dirty is a boolean that lets the frame buffer now if the frame is dirty.
+      Pin_count contains the count of how many callers have pins on the frame.
+      Valid is a boolean that lets the frame buffer know if the frame contains valid data.
+      Refbit is used to help with choosing the next victim of the clock replacement policy.
+      Pageno is the disk page number of the data.
     
     BufMgr.java - 
     	The BufMgr is the main class used and implemented in project 1.  The constructor of the BufMgr is used 
