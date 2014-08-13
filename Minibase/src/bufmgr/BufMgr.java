@@ -26,7 +26,7 @@ import java.util.Map;
 public class BufMgr implements GlobalConst {
 
   // This is the array of frames (it contains pages)
-  Page[] buffer_pool;
+  Page[] bufpool;
   
   // This is the array of descripters for the frames
   FrameDesc[] frametab;
@@ -38,7 +38,7 @@ public class BufMgr implements GlobalConst {
   HashMap<Integer, Integer> Page2Frame;
   HashMap<Integer, Integer> Frame2Page;
   
-  Clock replPolicy;
+  Replacer replacer;
     
   /**
    * Constructs a buffer manager by initializing member data.  
@@ -48,15 +48,15 @@ public class BufMgr implements GlobalConst {
   public BufMgr(int numframes) {
 
     // Initialize everything
-    buffer_pool = new Page[numframes];
+    bufpool = new Page[numframes];
     frametab = new FrameDesc[numframes];
     for (int i=0; i<frametab.length; i++)
     {
-      buffer_pool[i] = new Page();
+      bufpool[i] = new Page();
       frametab[i] = new FrameDesc();
     }
 
-    replPolicy = new Clock(this); 
+    replacer = new Clock(this); 
     Page2Frame = new HashMap<>();
     Frame2Page = new HashMap<>();
   } // public BufMgr(int numframes)
@@ -97,7 +97,7 @@ public class BufMgr implements GlobalConst {
     {
       // There is no mapping for this page, go find a frame it can
       // live in.
-      int framenum = replPolicy.pickVictim();
+      int framenum = replacer.pickVictim();
       if (framenum != -1)
       {
         // Found a frame for the page to live in
@@ -105,7 +105,7 @@ public class BufMgr implements GlobalConst {
         {
           // The frame had a page in it that became dirty,
           // so write it out to the disk before using the frame.
-          Minibase.DiskManager.write_page(frametab[framenum].pageno, buffer_pool[framenum]);
+          Minibase.DiskManager.write_page(frametab[framenum].pageno, bufpool[framenum]);
         }
 
         switch (contents)
@@ -117,8 +117,8 @@ public class BufMgr implements GlobalConst {
             // descripters and update the hashmap.
             Page diskpage = new Page();
             Minibase.DiskManager.read_page(pageno, diskpage);
-            buffer_pool[framenum].copyPage(diskpage);
-            mempage.setPage(buffer_pool[framenum]);
+            bufpool[framenum].copyPage(diskpage);
+            mempage.setPage(bufpool[framenum]);
             frametab[framenum].pin_count++;  
             frametab[framenum].valid = true; 
             frametab[framenum].pageno = new PageId(pageno.pid); 
@@ -130,8 +130,8 @@ public class BufMgr implements GlobalConst {
             // Copy page in mempage into the frame in the buffer pool,
             // set mempage to refer to it, update the frame descripters
             // and update the hashmap.
-            buffer_pool[framenum].copyPage(mempage);  
-            mempage.setPage(buffer_pool[framenum]);
+            bufpool[framenum].copyPage(mempage);  
+            mempage.setPage(bufpool[framenum]);
             frametab[framenum].pin_count++;  
             frametab[framenum].valid = true;  
             frametab[framenum].pageno = new PageId(pageno.pid); 
@@ -162,7 +162,7 @@ public class BufMgr implements GlobalConst {
       // The page is already mapped to a frame.  Pin it and set
       // mempage to refer to it.
       frametab[FrameNum].pin_count++;  
-      mempage.setPage(buffer_pool[FrameNum]);
+      mempage.setPage(bufpool[FrameNum]);
     }
   } // public void pinPage(PageId pageno, Page page, int contents)
   
@@ -298,7 +298,7 @@ public class BufMgr implements GlobalConst {
     if (FrameNum != null)
     {
       // Write the page to disk
-      Minibase.DiskManager.write_page(pageno, buffer_pool[FrameNum]);
+      Minibase.DiskManager.write_page(pageno, bufpool[FrameNum]);
     }
     else
     {
