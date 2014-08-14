@@ -256,7 +256,7 @@ public class HeapFile implements GlobalConst {
    * 
    * @throws IllegalArgumentException if the rid is invalid
    */
-  public byte[] selectRecord(RID rid) {
+  public byte[] selectRecord(RID rid) throws IllegalArgumentException {
     throw new UnsupportedOperationException("Not implemented");
   }
 
@@ -265,7 +265,7 @@ public class HeapFile implements GlobalConst {
    * 
    * @throws IllegalArgumentException if the rid or new record is invalid
    */
-  public void updateRecord(RID rid, byte[] newRecord) {
+  public void updateRecord(RID rid, byte[] newRecord) throws IllegalArgumentException {
     throw new UnsupportedOperationException("Not implemented");
   }
 
@@ -274,7 +274,7 @@ public class HeapFile implements GlobalConst {
    * 
    * @throws IllegalArgumentException if the rid is invalid
    */
-  public void deleteRecord(RID rid) {
+  public void deleteRecord(RID rid) throws IllegalArgumentException {
     throw new UnsupportedOperationException("Not implemented");
   }
 
