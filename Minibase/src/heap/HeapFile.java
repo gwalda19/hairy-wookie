@@ -1,6 +1,8 @@
 package heap;
 
 import global.GlobalConst;
+import global.Minibase;
+import global.PageId;
 import global.RID;
 
 /**
@@ -13,13 +15,52 @@ import global.RID;
  */
 public class HeapFile implements GlobalConst {
 
+  static final short DATA_PAGE = 11;
+  static final short DIR_PAGE = 12;
+  String fileName;
+  PageId headId;
+  Boolean isTemp;
+
   /**
    * If the given name already denotes a file, this opens it; otherwise, this
    * creates a new empty file. A null name produces a temporary heap file which
    * requires no DB entry.
    */
   public HeapFile(String name) {
-    throw new UnsupportedOperationException("Not implemented");
+    
+    if (name == null)
+    {
+      // Construct a temporary heapfile.
+      // Set heapfile name to an empty string so the toString() method works.
+      isTemp = true;
+      fileName = "";
+      headId = null;
+    }
+    else
+    {
+      // Construct a heapfile.
+      // Store heapfile name and attempt to get the pageid of the head dir
+      // associated with it from the disk.
+      isTemp = false;
+      fileName = name;
+      headId = Minibase.DiskManager.get_file_entry(fileName);
+    }
+    
+    if (headId == null)
+    {
+      // We are either a temp heapfile or a previously undefined/new
+      // one.  So, create the head dir and initialize it.
+      DirPage dirPage = new DirPage();
+      headId = Minibase.BufferManager.newPage(dirPage, 1);
+      dirPage.setCurPage(headId);
+      Minibase.BufferManager.unpinPage(headId, UNPIN_DIRTY);
+      if (!isTemp)
+      {
+        // Not temp, so save the head dir pageid to disk for 
+        // any future references.
+        Minibase.DiskManager.add_file_entry(fileName, headId);
+      }
+    }
   }
 
   /**
@@ -27,14 +68,41 @@ public class HeapFile implements GlobalConst {
    * object; deletes the heap file if it's temporary.
    */
   protected void finalize() throws Throwable {
-    throw new UnsupportedOperationException("Not implemented");
+    
+    if (isTemp)
+    {
+      deleteFile();
+    }
   }
 
   /**
    * Deletes the heap file from the database, freeing all of its pages.
    */
   public void deleteFile() {
-    throw new UnsupportedOperationException("Not implemented");
+    
+    PageId dirId = new PageId(headId.pid);
+    DirPage dirPage = new DirPage();
+    
+    do
+    {
+      Minibase.BufferManager.pinPage(dirId, dirPage, PIN_DISKIO);
+      PageId pageId = new PageId(dirId.pid);
+      dirId = dirPage.getNextPage();
+
+      for (short i=0; i < dirPage.getEntryCnt(); i++)
+      {
+        PageId dataId = dirPage.getPageId(i);
+        Minibase.BufferManager.freePage(dataId);
+      }
+      
+      Minibase.BufferManager.unpinPage(pageId, UNPIN_CLEAN);
+      Minibase.BufferManager.freePage(pageId);
+    } while (dirId.pid != INVALID_PAGEID);
+
+    if (!isTemp)
+    {
+      Minibase.DiskManager.delete_file_entry(fileName);
+    }
   }
 
   /**
