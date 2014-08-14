@@ -117,7 +117,138 @@ public class HeapFile implements GlobalConst {
    * @throws IllegalArgumentException if the record is too large
    */
   public RID insertRecord(byte[] record) {
-    throw new UnsupportedOperationException("Not implemented");
+    
+    if (record.length > (PAGE_SIZE - DataPage.HEADER_SIZE - DataPage.SLOT_SIZE))
+    {
+      // If the record size is too big then we can't fit it.  The max length
+      // is 1000 bytes (1024 - 20 - 4) for a record on a data page.
+      throw new IllegalArgumentException();
+    }
+    
+    // Start at the head dir.
+    PageId dirId = new PageId(headId.pid);
+    DirPage dirPage = new DirPage();
+    PageId curPageId;
+    RID rid = null;
+    
+    do
+    {
+      // Pin current dir page and get the next dir page.
+      curPageId = new PageId(dirId.pid);
+      Minibase.BufferManager.pinPage(curPageId, dirPage, PIN_DISKIO);
+      dirId = dirPage.getNextPage();
+
+      // Go thru each directory entry on the dir page.
+      for (short i=0; i < dirPage.getEntryCnt(); i++)
+      {
+        // We need entry for a data page that can store the record plus
+        // the room for the slot.
+        if (dirPage.getFreeCnt(i) >= (record.length + DataPage.SLOT_SIZE))
+        {
+          // We found one, so pin the data page and insert the record in it.
+          PageId dataId = dirPage.getPageId(i);
+          DataPage dataPage = new DataPage();
+          Minibase.BufferManager.pinPage(dataId, dataPage, PIN_DISKIO);
+          rid = dataPage.insertRecord(record);
+
+          // Record the new record count and new free space count into this
+          // directory entry and then unpin the data page.
+          dirPage.setRecCnt(i, dataPage.getSlotCount());
+          dirPage.setFreeCnt(i, dataPage.getFreeSpace());
+          Minibase.BufferManager.unpinPage(dataId, UNPIN_DIRTY);
+          
+          // We're done our search and have a rid, so we can get out.
+          break;
+        }
+      }
+
+      if (rid != null)
+      {
+        // We inserted the record and updated the directory entry so
+        // we need to unpin, write the changes and get out.
+        Minibase.BufferManager.unpinPage(curPageId, UNPIN_DIRTY);
+        break;
+      }
+      
+      // Still haven't found what we're looking for.
+      Minibase.BufferManager.unpinPage(curPageId, UNPIN_CLEAN);
+    } while (dirId.pid != INVALID_PAGEID);
+    
+    if (rid == null)
+    {
+      // If we got here then we went thru all the dir pages and couldn't find a
+      // data page that could hold the record. In this case we need to create a
+      // new data page to hold it.
+      DataPage dataPage = new DataPage();
+      PageId dataId = Minibase.BufferManager.newPage(dataPage, 1);
+      dataPage.setCurPage(dataId);
+      rid = dataPage.insertRecord(record);
+      short slotCount = dataPage.getSlotCount();
+      short freeSpace = dataPage.getFreeSpace();
+      Minibase.BufferManager.unpinPage(dataId, UNPIN_DIRTY);
+      
+      // We now need to find a dir page to hold the entry for the new data page
+      // we created.  At this point we have the pageid of the last dir page 
+      // (in curPageId) from the previous search.  But we cannot just insert it
+      // there as there may have been deletes on previous dir pages. Or this
+      // last dir page may have max entries.  So, unfortunately we need to
+      // search again from the start.
+      dirId = new PageId(headId.pid);
+      boolean addedEntry = false;
+      
+      do
+      {
+        // Pin current dir page and get the next dir page.
+        curPageId = new PageId(dirId.pid);
+        Minibase.BufferManager.pinPage(curPageId, dirPage, PIN_DISKIO);
+        dirId = dirPage.getNextPage();
+
+        short entryCnt = dirPage.getEntryCnt();
+        if (entryCnt < DirPage.MAX_ENTRIES)
+        {
+          // There's room for an entry on this dir page.  So enter it, unpin 
+          // dir page and get out.
+          dirPage.setPageId(entryCnt, dataId);
+          dirPage.setRecCnt(entryCnt, slotCount);
+          dirPage.setFreeCnt(entryCnt, freeSpace);
+          dirPage.setEntryCnt(++entryCnt);
+          Minibase.BufferManager.unpinPage(curPageId, UNPIN_DIRTY);
+          addedEntry = true;
+          break;
+        }
+      
+        // Still haven't found what we're looking for.
+        Minibase.BufferManager.unpinPage(curPageId, UNPIN_CLEAN);
+      } while (dirId.pid != INVALID_PAGEID);
+      
+      if (!addedEntry)
+      {
+        // If we got here then every dir page already has max entries.  In this
+        // case we need to add a new dir page.  We already know that curPageId
+        // referes to the last dir page from the previous search, so pin it.
+        Minibase.BufferManager.pinPage(curPageId, dirPage, PIN_DISKIO);
+        
+        // Create the new dir page and record the entry
+        DirPage newDirPage = new DirPage();
+        PageId newDirId = Minibase.BufferManager.newPage(newDirPage, 1);
+        newDirPage.setCurPage(newDirId);
+        newDirPage.setPageId(0, dataId);
+        newDirPage.setRecCnt(0, slotCount);
+        newDirPage.setFreeCnt(0, freeSpace);
+        newDirPage.setEntryCnt((short)1);
+
+        // Set the old last dir page to point to the new last dir page 
+        // and vice-versa.
+        dirPage.setNextPage(newDirId);
+        newDirPage.setPrevPage(curPageId);
+        
+        // Unpin both dir pages now that they are modified.
+        Minibase.BufferManager.unpinPage(newDirId, UNPIN_DIRTY);
+        Minibase.BufferManager.unpinPage(curPageId, UNPIN_DIRTY);
+      }
+    }
+    
+    return rid;
   }
 
   /**
