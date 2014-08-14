@@ -80,27 +80,33 @@ public class HeapFile implements GlobalConst {
    */
   public void deleteFile() {
     
+    // Start at the head dir.
     PageId dirId = new PageId(headId.pid);
     DirPage dirPage = new DirPage();
     
     do
     {
-      Minibase.BufferManager.pinPage(dirId, dirPage, PIN_DISKIO);
-      PageId pageId = new PageId(dirId.pid);
+      // Pin current dir page and get the next dir page.
+      PageId curPageId = new PageId(dirId.pid);
+      Minibase.BufferManager.pinPage(curPageId, dirPage, PIN_DISKIO);
       dirId = dirPage.getNextPage();
 
+      // Go thru each directory entry on the dir page.
       for (short i=0; i < dirPage.getEntryCnt(); i++)
       {
+        // Get the data pageid and free it.
         PageId dataId = dirPage.getPageId(i);
         Minibase.BufferManager.freePage(dataId);
       }
       
-      Minibase.BufferManager.unpinPage(pageId, UNPIN_CLEAN);
-      Minibase.BufferManager.freePage(pageId);
+      // Unpin and free the current dir page.
+      Minibase.BufferManager.unpinPage(curPageId, UNPIN_CLEAN);
+      Minibase.BufferManager.freePage(curPageId);
     } while (dirId.pid != INVALID_PAGEID);
 
     if (!isTemp)
     {
+      // Not temp, so delete the heapfile entry from the disk.
       Minibase.DiskManager.delete_file_entry(fileName);
     }
   }
