@@ -165,7 +165,7 @@ public class HeapFile implements GlobalConst {
    * Returns the name of the heap file.
    */
   public String toString() {
-    throw new UnsupportedOperationException("Not implemented");
+    return fileName;
   }
 
 } // public class HeapFile implements GlobalConst
