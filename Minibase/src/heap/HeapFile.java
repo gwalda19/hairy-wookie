@@ -151,7 +151,29 @@ public class HeapFile implements GlobalConst {
    * Gets the number of records in the file.
    */
   public int getRecCnt() {
-    throw new UnsupportedOperationException("Not implemented");
+	int count = 0;
+	DirPage dirPage = new DirPage();
+	PageId dirId = new PageId(headId.pid);
+	
+	//go through each dirPage in the heap file
+	do
+    {
+      // Pin current dir page and get the next dir page.
+      PageId curPageId = new PageId(dirId.pid);
+      Minibase.BufferManager.pinPage(curPageId, dirPage, PIN_DISKIO);
+      dirId = dirPage.getNextPage();
+
+  	  // Go thru each directory entry on the dir page.
+      for (short i=0; i < dirPage.getEntryCnt(); i++)
+      {
+        count = count + dirPage.getRecCnt(i);
+      }
+      
+      // Unpin and free the current dir page.
+      Minibase.BufferManager.unpinPage(curPageId, UNPIN_CLEAN);
+    } while (dirId.pid != INVALID_PAGEID);
+
+    return count;
   }
 
   /**
