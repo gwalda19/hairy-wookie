@@ -116,7 +116,7 @@ public class HeapFile implements GlobalConst {
    * 
    * @throws IllegalArgumentException if the record is too large
    */
-  public RID insertRecord(byte[] record) {
+  public RID insertRecord(byte[] record) throws IllegalArgumentException {
     
     if (record.length > (PAGE_SIZE - DataPage.HEADER_SIZE - DataPage.SLOT_SIZE))
     {
