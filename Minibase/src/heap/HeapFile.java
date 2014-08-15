@@ -266,24 +266,24 @@ public class HeapFile implements GlobalConst {
    * @throws IllegalArgumentException if the rid or new record is invalid
    */
   public void updateRecord(RID rid, byte[] newRecord) throws IllegalArgumentException {
-	  
+
 	  // check for null parameters
 	  if (rid == null || newRecord == null) {
 		  throw new IllegalArgumentException();
 	  }
-	  
+
 	  DataPage page = new DataPage();
-      Minibase.BufferManager.pinPage(rid.pageno, page, PIN_DISKIO);
-      try
-      {
-    	  page.updateRecord(rid, newRecord);
-          Minibase.BufferManager.unpinPage(rid.pageno, true);
-      }
-      catch(IllegalArgumentException exception)
-      {
-          Minibase.BufferManager.unpinPage(rid.pageno, false);
-          throw exception;
-      }
+	  Minibase.BufferManager.pinPage(rid.pageno, page, PIN_DISKIO);
+	  try
+	  {
+		  page.updateRecord(rid, newRecord);
+		  Minibase.BufferManager.unpinPage(rid.pageno, true);
+	  }
+	  catch(IllegalArgumentException exception)
+	  {
+		  Minibase.BufferManager.unpinPage(rid.pageno, false);
+		  throw exception;
+	  }
   }
 
   /**
