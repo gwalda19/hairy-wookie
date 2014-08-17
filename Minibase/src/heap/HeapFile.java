@@ -284,24 +284,25 @@ public class HeapFile implements GlobalConst {
    * @throws IllegalArgumentException if the rid or new record is invalid
    */
   public void updateRecord(RID rid, byte[] newRecord) throws IllegalArgumentException {
+ 
+    // check for null parameters
+    if (rid == null || newRecord == null)
+    {
+      throw new IllegalArgumentException();
+    }
 
-	  // check for null parameters
-	  if (rid == null || newRecord == null) {
-		  throw new IllegalArgumentException();
-	  }
-
-	  DataPage page = new DataPage();
-	  Minibase.BufferManager.pinPage(rid.pageno, page, PIN_DISKIO);
-	  try
-	  {
-		  page.updateRecord(rid, newRecord);
-		  Minibase.BufferManager.unpinPage(rid.pageno, UNPIN_DIRTY);
-	  }
-	  catch(IllegalArgumentException exception)
-	  {
-		  Minibase.BufferManager.unpinPage(rid.pageno, UNPIN_CLEAN);
-		  throw exception;
-	  }
+    DataPage page = new DataPage();
+    Minibase.BufferManager.pinPage(rid.pageno, page, PIN_DISKIO);
+    try
+    {
+      page.updateRecord(rid, newRecord);
+      Minibase.BufferManager.unpinPage(rid.pageno, UNPIN_DIRTY);
+    }
+    catch(IllegalArgumentException exception)
+    {
+      Minibase.BufferManager.unpinPage(rid.pageno, UNPIN_CLEAN);
+      throw exception;
+    }
   }
 
   /**
@@ -317,19 +318,20 @@ public class HeapFile implements GlobalConst {
    * Gets the number of records in the file.
    */
   public int getRecCnt() {
-	int count = 0;
-	DirPage dirPage = new DirPage();
-	PageId dirId = new PageId(headId.pid);
+      
+    int count = 0;
+    DirPage dirPage = new DirPage();
+    PageId dirId = new PageId(headId.pid);
 	
-	//go through each dirPage in the heap file
-	do
+    //go through each dirPage in the heap file
+    do
     {
       // Pin current dir page and get the next dir page.
       PageId curPageId = new PageId(dirId.pid);
       Minibase.BufferManager.pinPage(curPageId, dirPage, PIN_DISKIO);
       dirId = dirPage.getNextPage();
 
-  	  // Go thru each directory entry on the dir page.
+      // Go thru each directory entry on the dir page.
       for (short i=0; i < dirPage.getEntryCnt(); i++)
       {
         count = count + dirPage.getRecCnt(i);
