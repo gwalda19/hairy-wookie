@@ -106,6 +106,7 @@ public class BufMgr implements GlobalConst {
           // The frame had a page in it that became dirty,
           // so write it out to the disk before using the frame.
           Minibase.DiskManager.write_page(frametab[framenum].pageno, bufpool[framenum]);
+          frametab[framenum].dirty = false;
         }
 
         switch (contents)
