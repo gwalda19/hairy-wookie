@@ -205,9 +205,14 @@ public class BufMgr implements GlobalConst {
     }
     else
     {
-      // Set dirty flag to requested state and adjust
-      // the pin count.
-      frametab[FrameNum].dirty = dirty;
+      if (dirty)
+      {
+        // Once your unpinned dirty you stay dirty until your written
+        // out to disk the next time the frame is pinned.
+        frametab[FrameNum].dirty = dirty;
+      }
+      
+      // Update the pin count.
       frametab[FrameNum].pin_count--;
       if (frametab[FrameNum].pin_count == 0)
       {
