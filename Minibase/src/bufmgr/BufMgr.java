@@ -121,6 +121,8 @@ public class BufMgr implements GlobalConst {
             mempage.setPage(bufpool[framenum]);
             frametab[framenum].pin_count++;  
             frametab[framenum].valid = true; 
+            frametab[framenum].dirty = false; 
+            frametab[framenum].refbit = false; 
             frametab[framenum].pageno = new PageId(pageno.pid); 
             addToHashMap(pageno.pid, framenum);
             break;        
@@ -134,6 +136,8 @@ public class BufMgr implements GlobalConst {
             mempage.setPage(bufpool[framenum]);
             frametab[framenum].pin_count++;  
             frametab[framenum].valid = true;  
+            frametab[framenum].dirty = false; 
+            frametab[framenum].refbit = false; 
             frametab[framenum].pageno = new PageId(pageno.pid); 
             addToHashMap(pageno.pid, framenum);
             break;        
