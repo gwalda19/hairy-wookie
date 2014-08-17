@@ -295,7 +295,8 @@ public class BufMgr implements GlobalConst {
       if ((frametab[i].valid) && (frametab[i].dirty))
       {
         // Only flush frames that have valid pages that are dirty
-        flushPage(frametab[i].pageno);    
+        flushPage(frametab[i].pageno);   
+        frametab[i].dirty = false;
       }
     }
   } // public void flushAllFrames()
