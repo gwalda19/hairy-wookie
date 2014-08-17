@@ -257,7 +257,25 @@ public class HeapFile implements GlobalConst {
    * @throws IllegalArgumentException if the rid is invalid
    */
   public byte[] selectRecord(RID rid) throws IllegalArgumentException {
-    throw new UnsupportedOperationException("Not implemented");
+
+    byte[] record;
+    DataPage dataPage = new DataPage();
+    Minibase.BufferManager.pinPage(rid.pageno, dataPage, PIN_DISKIO);
+    
+    try
+    {
+      record = dataPage.selectRecord(rid);
+    }
+    catch (Exception e)
+    {
+      // Invalid rid, so unpin and throw exception.
+      Minibase.BufferManager.unpinPage(rid.pageno, UNPIN_CLEAN);
+      throw new IllegalArgumentException();            
+    }
+    
+    // Valid rid, so unpin and return the record.
+    Minibase.BufferManager.unpinPage(rid.pageno, UNPIN_CLEAN);
+    return record;
   }
 
   /**
@@ -277,11 +295,11 @@ public class HeapFile implements GlobalConst {
 	  try
 	  {
 		  page.updateRecord(rid, newRecord);
-		  Minibase.BufferManager.unpinPage(rid.pageno, true);
+		  Minibase.BufferManager.unpinPage(rid.pageno, UNPIN_DIRTY);
 	  }
 	  catch(IllegalArgumentException exception)
 	  {
-		  Minibase.BufferManager.unpinPage(rid.pageno, false);
+		  Minibase.BufferManager.unpinPage(rid.pageno, UNPIN_CLEAN);
 		  throw exception;
 	  }
   }
