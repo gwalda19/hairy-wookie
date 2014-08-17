@@ -205,6 +205,11 @@ public class BufMgr implements GlobalConst {
       // the pin count.
       frametab[FrameNum].dirty = dirty;
       frametab[FrameNum].pin_count--;
+      if (frametab[FrameNum].pin_count == 0)
+      {
+        // When all the pins are removed set the reference bit.
+        frametab[FrameNum].refbit = true;
+      }
     }
   } // public void unpinPage(PageId pageno, boolean dirty)
   
