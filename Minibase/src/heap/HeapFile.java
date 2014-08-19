@@ -311,7 +311,50 @@ public class HeapFile implements GlobalConst {
    * @throws IllegalArgumentException if the rid is invalid
    */
   public void deleteRecord(RID rid) throws IllegalArgumentException {
-    throw new UnsupportedOperationException("Not implemented");
+	  //sf
+	  
+	  //check for invalid null rid
+	  if (rid == null) throw new IllegalArgumentException();
+	  
+	  //pin datapage w/record to be deleted
+	  DataPage dataPage = new DataPage();
+	  Minibase.BufferManager.pinPage(rid.pageno, dataPage, PIN_DISKIO);
+  
+	  //get length of record being deleted
+	  int recordLength = dataPage.getSlotLength(rid.slotno);
+
+	  //delete record & compact record space
+	  try
+	  {
+		  dataPage.deleteRecord(rid);
+		  Minibase.BufferManager.unpinPage(rid.pageno, UNPIN_DIRTY);
+	  }
+	  catch(IllegalArgumentException exception)
+	  {
+		  Minibase.BufferManager.unpinPage(rid.pageno, UNPIN_CLEAN);
+		  throw exception;
+	  }
+	  
+	  //traverse dirpages until you find the one with entry referencing deleted datapage
+	  
+	  //pin dirpage
+	  
+	  //decrement record count in directory entry
+	  
+	  //update free space count in directory entry
+	  
+	  //handle if no records left on page
+	  
+	  //handle if no entries left on dirpage
+	  
+	  //mark datapage dirty & release
+	  
+	  //mark dirpage dirty & release
+	  
+	  //else if rid is invalid (record doesnt exist), throw exception
+	  
+	  //sf
+
   }
 
   /**
