@@ -32,17 +32,16 @@ File Descriptions:
     	
     	deleteRecord: This function ...
     	
-    	getRecCnt: This function ...
+    	getRecCnt: This function updates the specified record in the heap file.
     	
-    	openScan: This function ...
+    	openScan: This function initiates a sequential scan of the heap file.
     	
-    	toString: This function ...
+    	toString: This function returns the name of the heap file.
 
 Division of Labor:
    
-    We began by having everyone read the chapter and get themselves familiar with how the buffer manager should work.
-    We also had to read up on how the clock replacement policy should get implemented. We would meet briefly after class
-    to go over what has been completed and what still needs to be implemented. 
+    We began by having everyone read the chapter and get themselves familiar with how the heap should work.
+    We would meet briefly after class to go over what has been completed and what still needs to be implemented.
     
     The BufMgr class was implemented by Bill Annocki, Mike Norris, & Sean Fast (45 hours). The Clock and FrameDesc classes were 
     implemented by Dave Gwalthney and Dave Shanline (30 hours). The integration with Github and Eclipse was set up by Dave Gwalthney & 
