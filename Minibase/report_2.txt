@@ -1,6 +1,105 @@
 Report for project 2.
 
 
+Overall Status:  
+	This implementation of BufMgr is 100% complete and passes all the tests from the BMTest  test driver as required.  
+	We started off the project by spending some time becoming familiar with GitHUb , so that we could use it as a 
+	version control system for the project.   During implementation, the first components that we found that we needed 
+	were the FrameDesc class and the pickVictim method of the Clock (Replacer) class.   This enabled us to then focus 
+	our attention on the implementations of the pinPage and unpinPage methods of BufMgr.   As these methods matured, 
+	we then started to focus on the remaining supporting methods in the BufMgr class that we needed.   We spent some 
+	time fixing some general issues and eventually were able to pass all tests successfully.   One of the last things 
+	we did, was to go back in and revisit/refine the way that we were using the HashMap so that we could improve/optimize 
+	the overall performance.
 
 
+File Descriptions:  
+
+  The following is a list and description of each file that we had to create or update. 
+
+    Clock.java - The Clock.java class extends the abstract class Replacer, and will be used as the replacement policy
+                 by the buffer manager class. We override the pickVictim() method in this class with the implementation
+                 of the clock replacement policy. In the pickVictim() method, we iterate through the frames in the array
+                 of frame descriptions looking for an available frame to store the current page.  First we check if the
+                 frame contains any valid data. If the frame is empty then we can store data to that frame, so we select
+                 it. If the frame contains valid data, we then check the frames pin count. If the pin count is greater
+                 than 0, then the frame is not a candidate for replacement so we increment the counter in order to check
+                 the next frame. If the pin count is 0, we then consider its reference bit which indicates how recently
+                 the frame was used. If the current frame has the reference bit turned on, then the algorithm turns it
+                 off and increments the counter to the next frame. If the frames pin count is 0 and the reference bit is
+                 off, then we have found an unpinned frame that has not been used recently, so we chose it and return
+                 its location (counter).
+    
+    FrameDesc.java -
+    	This is a class that is setup to be a data structure to hold the frame descriptions. This class has all
+    	protected member variables so that they can be used by elements residing in its own class or classes in
+    	the same package.
+
+    	Dirty is a boolean that lets the frame buffer now if the frame is dirty.
+    	Pin_count contains the count of how many callers have pins on the frame.
+    	Valid is a boolean that lets the frame buffer know if the frame contains valid data.
+    	Refbit is used to help with choosing the next victim of the clock replacement policy.
+    	Pageno is the disk page number of the data.
+    
+    BufMgr.java - 
+    	The BufMgr is the main class used and implemented in project 1.  The constructor of the BufMgr is used 
+    	to initialize the buffer pool as an array of Page objects. Each object is called a Frame.  As a parameter 
+    	the BufMgr constructor takes in the number of frames that will be in the buffer pool.  The constructor 
+    	also creates two hashmaps: one that maps pages to frames and the other that maps frames to pages.  
+    	Instead of having to search thru the hashmap looking for the page that the frame mapped to 
+    	previously (and removing it) every single time we add a new mapping, we are keep two hashmaps to do 
+    	this much more efficiently.  The BufMgr determines, very efficiently, what frame a given disk page occupies.
+    	
+    	pinPage: This function increments the pin count of a page in the buffer pool. If the page is not yet in
+    	the buffer pool, then it uses the replacement policy (the pickVictim method of the clock class in this case) 
+    	to select a frame to replace and adds the disk page to that frame and then pins it. It will also write the 
+    	replaced victim page in the frame to disk if the page residing in it was marked "dirty". If all pages in the 
+    	buffer pool are currently pinned then none can be replaced and an exception is thrown. 
+    	
+        addToHashMap: This function is used to add entries to the two hashmaps.  See the notes at the end of this
+        report for a detailed explanation of the double hashmap implementation.
+
+    	unpinPage: This function takes a frame in the buffer pool and decrements its pin count, while marking its
+    	dirty bit to the boolean value passed in as a parameter. If the pin count was already at zero when the function
+    	attempts to unpin it further, we throw an exception. An exception is also thrown if the page requested to be
+    	unpinned is not in the buffer pool to begin with. 
+    	
+    	newPage(): The function newPage() allocates a run of new disk pages and pins the first one in the buffer pool. 
+    	This method first checks the number of unpinned pages to ensure there are available slots in the buffer pool.  
+    	This method then allocates the number of disk pages passed in as a parameter. The BufMgr checks if the first page 
+    	is already mapped into the buffer pool and pinned. If not, it pins the first page and returns its page ID.
+    	
+    	freePage(): The method freePage() deallocates a single page from disk and freeing it from the buffer pool if needed.  
+    	This function takes in a PageId object as parameter to identify the exact page to free from the buffer pool.  
+    	The page ID is used to access the frame number and check if the page is already pinned. If the page is currently 
+    	pinned then the page cannot be freed from the buffer pool.
+    	
+    	flushAllPage(): The method flushAllPages() writes all the valid and dirty frames to disk. This function is similar 
+    	to flushPage() except for this method writes all pages to the disk.  The function loops through and finds all the 
+    	valid pages that have their dirty bit set and flushes those pages.
+    	
+    	flushPage(): The method flushPage() writes a page in the buffer pool to disk if that page is dirty. This function 
+    	takes in a PageId object as parameter to identify the exact page to flush from the buffer manager. This function 
+    	uses the page number to access the frame number and then writes that page to disk.
+    	
+    	getNumBuffers(): The method getNumBuffers() get the total number of buffer frames. This function returns the number 
+    	of frames in the buffer pool.
+    	
+    	getNumUnpinned(): The method getNumUnpinned() gets the total number of unpinned buffer frames in the BufMgr.  
+    	To determine the number of unpinned buffer frames, the BufMgr loops through the entire frame table and counts 
+    	all the empty unpinned buffer frames.
+
+Division of Labor:
+   
+    We began by having everyone read the chapter and get themselves familiar with how the buffer manager should work.
+    We also had to read up on how the clock replacement policy should get implemented. We would meet briefly after class
+    to go over what has been completed and what still needs to be implemented. 
+    
+    The BufMgr class was implemented by Bill Annocki, Mike Norris, & Sean Fast (45 hours). The Clock and FrameDesc classes were 
+    implemented by Dave Gwalthney and Dave Shanline (30 hours). The integration with Github and Eclipse was set up by Dave Gwalthney & 
+    Dave Shanline.
+    
+Notes:
+
+   Bug found in buffer manager not resetting the dirty bit....
 
