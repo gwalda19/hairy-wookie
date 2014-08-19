@@ -17,15 +17,11 @@ File Descriptions:
 
   The following is the file and description of each function that we had to create or update. 
 
-    HeapFile.java - 
-    	The BufMgr is the main class used and implemented in project 1.  The constructor of the BufMgr is used 
-    	to initialize the buffer pool as an array of Page objects. Each object is called a Frame.  As a parameter 
-    	the BufMgr constructor takes in the number of frames that will be in the buffer pool.  The constructor 
-    	also creates two hashmaps: one that maps pages to frames and the other that maps frames to pages.  
-    	Instead of having to search thru the hashmap looking for the page that the frame mapped to 
-    	previously (and removing it) every single time we add a new mapping, we are keep two hashmaps to do 
-    	this much more efficiently.  The BufMgr determines, very efficiently, what frame a given disk page occupies.
-    	
+    HeapFile.java -
+        The HeapFile is the main class used and implemented in project 2. The constructor of the HeapFile is used
+        to initialize the heap with a given name. ...
+
+        
     	deleteFile: This function ... 
     	
         insertRecord: This function ...
