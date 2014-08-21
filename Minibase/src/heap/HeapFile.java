@@ -311,7 +311,6 @@ public class HeapFile implements GlobalConst {
    * @throws IllegalArgumentException if the rid is invalid
    */
   public void deleteRecord(RID rid) throws IllegalArgumentException {
-	  //sf
 	  
 	  //check for invalid null rid
 	  if (rid == null) throw new IllegalArgumentException();
@@ -321,7 +320,7 @@ public class HeapFile implements GlobalConst {
 	  Minibase.BufferManager.pinPage(rid.pageno, dataPage, PIN_DISKIO);
   
 	  //get length of record being deleted
-	  int recordLength = dataPage.getSlotLength(rid.slotno);
+	  short recordLength = dataPage.getSlotLength(rid.slotno);
 
 	  //delete record & compact record space
 	  try
@@ -336,24 +335,98 @@ public class HeapFile implements GlobalConst {
 	  }
 	  
 	  //traverse dirpages until you find the one with entry referencing deleted datapage
-	  
-	  //pin dirpage
-	  
-	  //decrement record count in directory entry
-	  
-	  //update free space count in directory entry
-	  
-	  //handle if no records left on page
-	  
-	  //handle if no entries left on dirpage
-	  
-	  //mark datapage dirty & release
-	  
-	  //mark dirpage dirty & release
-	  
-	  //else if rid is invalid (record doesnt exist), throw exception
-	  
-	  //sf
+	  DirPage dirPage = new DirPage();
+	  PageId dirId = new PageId(headId.pid);
+
+	  //go through each dirPage in the heap file
+	  do
+	  {
+		  // Pin current dir page and get the next dir page.
+		  PageId curPageId = new PageId(dirId.pid);
+		  Minibase.BufferManager.pinPage(curPageId, dirPage, PIN_DISKIO);
+		  dirId = dirPage.getNextPage();
+
+		  // Go thru each directory entry on the dir page till we find our rid pageid
+		  for (short i=0; i < dirPage.getEntryCnt(); i++)
+		  {
+			  if (dirPage.getPageId(i).pid == rid.pageno.pid)
+			  {//we found the dir entry with the page id of our record
+				  //decrement record count in directory entry
+				  short newRecCnt = dirPage.getRecCnt(i);
+				  newRecCnt--;
+				  dirPage.setRecCnt(i, newRecCnt);
+				  
+				  //update free space count in directory entry
+				  short newFreeCnt = dirPage.getFreeCnt(i);
+				  newFreeCnt += recordLength;
+				  dirPage.setFreeCnt(i, newFreeCnt);
+				  
+				  //handle if no records left on datapage (newRecCnt < 1)
+				  if (newRecCnt < 1)
+				  {//need to remove empty datapage
+					  //delete entry in dirpage & compact down
+					  dirPage.compact(i);
+					  
+					  //unpin datapage & mark dirty for disk io
+					  Minibase.BufferManager.unpinPage(rid.pageno, UNPIN_DIRTY);
+					  
+					  //delete empty datapage from memory
+					  Minibase.BufferManager.freePage(rid.pageno);
+					  
+					  //now that we've deleted the datapage, check if
+					  //we need to delete an empty dirpage
+					  short newEntryCnt = dirPage.getEntryCnt();
+					  
+					  if (newEntryCnt < 1)
+					  {//need to remove empty dirpage 
+						  //check if head dirpage, if so dont delete
+						  if (curPageId.pid == headId.pid)
+						  {
+							  // Unpin and free the current dir page.
+							  Minibase.BufferManager.unpinPage(curPageId, UNPIN_CLEAN);
+							  break;
+						  }
+						  else
+						  {//not head dirpage, so delete after fixing prev/next links
+							  //pin parent dirpage
+							  DirPage parentDirPage = new DirPage();
+							  Minibase.BufferManager.pinPage(dirPage.getPrevPage(), parentDirPage, PIN_DISKIO);
+							  //set nextpage of parent to nextpage of child of current dirpage
+							  parentDirPage.setNextPage(dirPage.getNextPage());
+							  
+							  if(dirPage.getNextPage().pid != INVALID_PAGEID)
+							  {
+								//pin child dirpage
+								DirPage childDirPage = new DirPage();
+								Minibase.BufferManager.pinPage(dirPage.getNextPage(), childDirPage, PIN_DISKIO);
+								
+								//set prevpage of child to prevpage of current dirpage
+								childDirPage.setPrevPage(dirPage.getPrevPage());
+								
+								//unpin childpage
+								Minibase.BufferManager.unpinPage(dirPage.getNextPage(), UNPIN_DIRTY);
+							  }
+							  //unpin parent page
+							  Minibase.BufferManager.unpinPage(dirPage.getPrevPage(), UNPIN_DIRTY);
+							  
+						  }
+						  
+						  //unpin & free empty dirpage
+						  Minibase.BufferManager.unpinPage(curPageId, UNPIN_CLEAN);
+						  Minibase.BufferManager.freePage(curPageId);
+						  break;
+					  }
+				  }
+			  }
+				  
+		  }
+      
+		  // Unpin and free the current dir page.
+		  Minibase.BufferManager.unpinPage(curPageId, UNPIN_CLEAN);
+	  } while (dirId.pid != INVALID_PAGEID);
+
+
+
 
   }
 
