@@ -33,6 +33,7 @@ CREATE TABLE `photo_files` (
   `uploadname` varchar(128),
   `caption` varchar(128),
   `filelocation` varchar(256),
+  `album_id` int(8),
   PRIMARY KEY  (`photo_id`)
 );
 
