@@ -1,53 +1,91 @@
-Report for project 2.
+Group:
+	Bill Annocki
+	Sean Fast
+	Dave Gwalthney
+	Mike Norris
+	Dave Shanline
 
 
-Overall Status:  
-	This implementation of BufMgr is 100% complete and passes all the tests from the BMTest  test driver as required.  
-	We started off the project by spending some time becoming familiar with GitHUb , so that we could use it as a 
-	version control system for the project.   During implementation, the first components that we found that we needed 
-	were the FrameDesc class and the pickVictim method of the Clock (Replacer) class.   This enabled us to then focus 
-	our attention on the implementations of the pinPage and unpinPage methods of BufMgr.   As these methods matured, 
-	we then started to focus on the remaining supporting methods in the BufMgr class that we needed.   We spent some 
-	time fixing some general issues and eventually were able to pass all tests successfully.   One of the last things 
-	we did, was to go back in and revisit/refine the way that we were using the HashMap so that we could improve/optimize 
-	the overall performance.
+Overall Status:   
+	This implementation of the HeapFile is 100% complete and passes all the tests from the HFTest test driver as required.   
+	We started off by focusing on the constructor, the deleteFile and finalize methods. After that, there wasn't much
+	we could do (or test) without having actual records in the Heap file so despite it being rather complicated we focused
+	all our energy on the insertRecord method.   Once, we were able to insert records into the Heap File we tackled both
+	the selectRecord and updateRecord methods which were of moderate complexity. Around this time, we implemented both
+	getRecCnt and toString which were of moderate and easy complexity, respectively. The last item that we worked on was 
+	the deleteRecord method.  Which like insertRecord was highly complex.  Although we did notice that the HFTest did
+	not exercise some conditions (like deleting the very last record on a data page, deleting a directory entry that is
+	also the last one on the dir page, etc.), we coded for all those boundary conditions anyway.
 
+ 
+File Descriptions:   
+ 
+ 
+The following is a list and description of each file that we had to create or update.  
+ 
+      
+	HeapFile.java -  
+	The HeapFile is the main class used and implemented in project 2.  The constructor of the HeapFile is used  
+	to initialize the Heap File.  If a name is provided upon creation it will be written to disk and associated
+	with this Heap File for future references.  If a name is not provided the Heap File created will only exist
+	during the lifetime and scope of the program using it.
 
-File Descriptions:  
+	finalize: This method is called by the garbage collector and used to delete a temporary Heap File (if one
+	was created).
 
-  The following is the file and description of each function that we had to create or update. 
+	deleteFile:  This method is used to delete/free all the resources (dir and data pages) associated with a
+	Heap File.  It does this by navigating thru all the entries on each dir page and freeing each data page that
+	has an entry.  When this is complete, it frees the current dir page and moves on to the next (if it exists).
 
-    HeapFile.java -
-        The HeapFile is the main class used and implemented in project 2. The constructor of the HeapFile is used
-        to initialize the heap with a given name. ...
+	insertRecord:  This method is used to insert new records into the Heap File.  The first thing it does is to
+	validate that the record size does not exceed the maximum size of a record.  If it does it throws an exception.
+	Next, it searches thru the Heap File's dir pages looking for an existing entry that contains enough free space
+	to hold the record.  If it finds an entry, it insert the record into the corresponding data page and updates the 
+	directory entry's record count and free space count. If it doesn't find space then we need to create a new data
+	page to hold the record.  We then need to find a dir page to hold that entry, so we start searching again (because
+	there may be space on previous dir pages from deletions). If we find a dir page to store the entry we do so.  
+	Otherwise, this means all dir pages have max entries and we need to add a brand new dir page to hold the entry.
+	Which we then do by allocating another dir page and connecting it to old last dir page via the next/previous
+	pointers.  The directory entry is then stored in this new last dir page.
 
-        
-    	deleteFile: This function ... 
-    	
-        insertRecord: This function ...
+	selectRecord:  This method (which is given a rid) will use the PageId contained in the rid to pin the corresponding
+	data page and return the record identified in the rid.   If the rid is invalid and exception will be thrown.  The 
+	method ends with the data page being unpined (clean).
 
-    	selectRecord: This function ... 
-    	
-    	updateRecord: This function ...
-    	
-    	deleteRecord: This function ...
-    	
-    	getRecCnt: This function updates the specified record in the heap file.
-    	
-    	openScan: This function initiates a sequential scan of the heap file.
-    	
-    	toString: This function returns the name of the heap file.
+	updateRecord:  This method (which is given a rid) will use the PageId contained in the rid to pin the corresponding
+	data page and update the record identified in the rid.   If the rid is invalid and exception will be thrown.  An
+	exception will also be thrown if the new record is not the same exact size as the old record.  The method
+	ends with the data page being unpined (dirty if update successful, otherwise clean).
 
-Division of Labor:
-   
-    We began by having everyone read the chapter and get themselves familiar with how the heap should work.
-    We would meet briefly after class to go over what has been completed and what still needs to be implemented.
-    
-    The BufMgr class was implemented by Bill Annocki, Mike Norris, & Sean Fast (45 hours). The Clock and FrameDesc classes were 
-    implemented by Dave Gwalthney and Dave Shanline (30 hours). The integration with Github and Eclipse was set up by Dave Gwalthney & 
-    Dave Shanline.
-    
-Notes:
+	deleteRecord:  This method (which is given a rid) will use the PageId contained in the rid to pin the corresponding
+	data page and then delete the record identified in the rid.  If the rid is invalid and exception will be thrown.
+	After, the record is deleted from the data page the record count and free space needs to be adjusted in the dir
+	page entry that corresponds to this data page.  So, we need to go thru the dir pages searching for it.  When we
+	find it, we can update it and unpin both the data page and dir page (dirty).  As mentioned before, there are other
+	circumstances that can arise (even though they don't from HFtest driver) during a delete.  The first is when the
+	delete is for the last record on a data page.  In this case, the data page needs to be freed and the corresponding
+	dir entry needs to be removed.  However, we also need to then see if removing the dir entry leaves the dir page with 
+	no (zero) entries.  If it does, and this Heap File has only one dir page we are ok (empty Heap File).   However,
+	if it's dir pages 2 thru N that become empty we should remove it.  We do this by freeing the dir page and then
+	modifying the next/previous pointers of it's parent and child.
 
-   Bug found in buffer manager: We didn't reset the dirty bit after flushing the page.
+	getRecCnt:  This method will search thru all the directory entries on each dir page of the Heap File, adding
+	up all the records associated with each entry.  The total count of records is then returned.  It should be noted
+	that this can be done by pinning and unpinning (clean) only the dir pages.   The data pages never need to be
+	referenced to implement this method.
+
+	toString:  This method return the Heap File name.  If this is a temporary Heap File the name will be an
+	empty string.
+
+ 
+Division of Labor: 
+	We began by having everyone read the appropriate chapter and get themselves familiar with how the Heap File should work. 
+	Although we all worked on all aspects of the project at different times, a rough breakdown of labor would be as follows:
+
+	constructor/deleteFile/finalize – Gwalthney
+	getRecCnt/toString/finalize 	– Shanline
+	insertRecord 			– Annocki
+	deleteRecord 			– Fast
+	updateRecord/selectRecord 	– Norris
+
 
