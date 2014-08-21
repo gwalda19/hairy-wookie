@@ -12,6 +12,7 @@ DROP TABLE IF EXISTS photo_like;
 DROP TABLE IF EXISTS comment_like;
 DROP TABLE IF EXISTS events;
 DROP TABLE IF EXISTS event_comments;
+DROP TABLE IF EXISTS event_members;
 DROP TABLE IF EXISTS event_comment_like;
 
 CREATE TABLE `photo_users` (
@@ -87,14 +88,6 @@ CREATE TABLE `events` (
   `user_id` int(6),    
   `profile_pic_id` int(8), 
   PRIMARY KEY  (`event_id`)
-);
-
-CREATE TABLE `event_comments` (
-  `comment_id` int(8) NOT NULL,
-  `user_id` int(6), 
-  `event_id` int(6),
-  `comment_text` varchar(128),
-  PRIMARY KEY  (`comment_id`)
 );
 
 CREATE TABLE `event_comments` (
