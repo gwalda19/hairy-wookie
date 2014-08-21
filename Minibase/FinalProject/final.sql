@@ -6,6 +6,13 @@ DROP TABLE photo_users;
 DROP TABLE photo_files;
 DROP TABLE photo_user_links;
 DROP TABLE photo_comments;
+DROP TABLE IF EXISTS user_group;
+DROP TABLE IF EXISTS group_comments;
+DROP TABLE IF EXISTS photo_like;
+DROP TABLE IF EXISTS comment_like;
+DROP TABLE IF EXISTS events;
+DROP TABLE IF EXISTS event_comments;
+DROP TABLE IF EXISTS event_comment_like;
 
 CREATE TABLE `photo_users` (
   `user_id` int(6) NOT NULL,
@@ -88,6 +95,29 @@ CREATE TABLE `event_comments` (
   `event_id` int(6),
   `comment_text` varchar(128),
   PRIMARY KEY  (`comment_id`)
+);
+
+CREATE TABLE `event_comments` (
+  `comment_id` int(8) NOT NULL,
+  `user_id` int(6), 
+  `event_id` int(6),
+  `comment_text` varchar(128),
+  PRIMARY KEY  (`comment_id`)
+);
+
+CREATE TABLE `event_members` (
+  `event_members_id` int(8) NOT NULL,
+  `joindate` date,
+  `event_id` int(6),
+  PRIMARY KEY(event_members_id),
+  FOREIGN KEY(event_id) REFERENCES events(event_id)
+);
+
+CREATE TABLE `event_comment_like` (
+  `event_comment_id` int(8) NOT NULL,
+  `user_id` int(6),
+  `comment_id` int(8),
+  PRIMARY KEY  (`event_comment_id`)
 );
 
 -- make new user
