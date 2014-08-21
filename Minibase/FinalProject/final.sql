@@ -2,10 +2,10 @@ PRAGMA FOREIGN_KEY = ON;
 
 BEGIN TRANSACTION;
 
-DROP TABLE photo_users;
-DROP TABLE photo_files;
-DROP TABLE photo_user_links;
-DROP TABLE photo_comments;
+DROP TABLE IF EXISTS photo_users;
+DROP TABLE IF EXISTS photo_files;
+DROP TABLE IF EXISTS photo_user_links;
+DROP TABLE IF EXISTS photo_comments;
 DROP TABLE IF EXISTS user_group;
 DROP TABLE IF EXISTS group_comments;
 DROP TABLE IF EXISTS photo_like;
