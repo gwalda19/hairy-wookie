@@ -3,7 +3,7 @@ PRAGMA FOREIGN_KEY = ON;
 BEGIN TRANSACTION;
 
 DROP TABLE IF EXISTS photo_users;
-DROP TABLE IF EXISTS users_friends;
+DROP TABLE IF EXISTS users_friend;
 DROP TABLE IF EXISTS photo_files;
 DROP TABLE IF EXISTS photo_user_links;
 DROP TABLE IF EXISTS photo_comments;
@@ -32,9 +32,9 @@ CREATE TABLE `photo_users` (
 CREATE TABLE `users_friend` (
   `friend_id` int(6) NOT NULL,
   `user_id` int(6),
-  `friend_user_id` int(6)
-  PRIMARY KEY(friend_id)
-  FOREIGN KEY(user_id) REFERENCES photo_users(user_id)
+  `friend_user_id` int(6),
+  PRIMARY KEY(friend_id),
+  FOREIGN KEY(user_id) REFERENCES photo_users(user_id),
   FOREIGN KEY(friend_user_id) REFERENCES photo_users(user_id)
 );
 
@@ -170,7 +170,7 @@ insert into photo_user_links values(2, "1", "1");
 
 
 -- make new photo file
-insert into photo_files values(0, "2013-09-09", "somepic.jpg", "this is a caption", "/some/path/to/the/photo/pic.jpg");
+insert into photo_files values(0, "2013-09-09", "somepic.jpg", "this is a caption", "/some/path/to/the/photo/pic.jpg",0);
 
 
 -- make new photo_comments
