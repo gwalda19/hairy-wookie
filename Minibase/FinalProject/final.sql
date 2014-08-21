@@ -3,21 +3,23 @@ PRAGMA FOREIGN_KEY = ON;
 BEGIN TRANSACTION;
 
 DROP TABLE IF EXISTS photo_users;
+DROP TABLE IF EXISTS users_friends;
 DROP TABLE IF EXISTS photo_files;
 DROP TABLE IF EXISTS photo_user_links;
 DROP TABLE IF EXISTS photo_comments;
+DROP TABLE IF EXISTS photo_like;
+DROP TABLE IF EXISTS comment_like;
 DROP TABLE IF EXISTS user_group;
 DROP TABLE IF EXISTS group_comments;
 DROP TABLE IF EXISTS group_members;
 DROP TABLE IF EXISTS group_comment_like;
-DROP TABLE IF EXISTS photo_like;
-DROP TABLE IF EXISTS comment_like;
 DROP TABLE IF EXISTS events;
 DROP TABLE IF EXISTS event_comments;
 DROP TABLE IF EXISTS event_members;
 DROP TABLE IF EXISTS event_comment_like;
 DROP TABLE IF EXISTS photo_albums;
 
+------Users Tables------
 CREATE TABLE `photo_users` (
   `user_id` int(6) NOT NULL,
   `joindate` date,
@@ -27,6 +29,16 @@ CREATE TABLE `photo_users` (
   PRIMARY KEY  (`user_id`)
 );
 
+CREATE TABLE `users_friend` (
+  `friend_id` int(6) NOT NULL,
+  `user_id` int(6),
+  `friend_user_id` int(6)
+  PRIMARY KEY(friend_id)
+  FOREIGN KEY(user_id) REFERENCES photo_users(user_id)
+  FOREIGN KEY(friend_user_id) REFERENCES photo_users(user_id)
+);
+
+------Photo Tables------
 CREATE TABLE `photo_files` (
   `photo_id` int(8) NOT NULL,
   `uploaddate` date,
@@ -52,7 +64,21 @@ CREATE TABLE `photo_comments` (
   PRIMARY KEY  (`comment_id`)
 );
 
--- new tables------------------------------------------------------------
+CREATE TABLE `photo_like` (
+  `connection_id` int(8) NOT NULL,
+  `user_id` int(6),
+  `photo_id` int(8),
+  PRIMARY KEY  (`connection_id`)
+);
+
+CREATE TABLE `comment_like` (
+  `connection_id` int(8) NOT NULL,
+  `user_id` int(6),
+  `comment_id` int(8),
+  PRIMARY KEY  (`connection_id`)
+);
+
+------Groups Tables------
 CREATE TABLE `user_group` (
   `group_id` int(6) NOT NULL,
   `user_id` int(6), 
@@ -87,20 +113,7 @@ CREATE TABLE `group_comment_like` (
   FOREIGN KEY (group_comment_id) REFERENCES group_comments(comment_id)
 );
 
-CREATE TABLE `photo_like` (
-  `connection_id` int(8) NOT NULL,
-  `user_id` int(6),
-  `photo_id` int(8),
-  PRIMARY KEY  (`connection_id`)
-);
-
-CREATE TABLE `comment_like` (
-  `connection_id` int(8) NOT NULL,
-  `user_id` int(6),
-  `comment_id` int(8),
-  PRIMARY KEY  (`connection_id`)
-);
-
+------Events Tables------
 CREATE TABLE `events` (
   `event_id` int(6) NOT NULL,
   `eventdate` date,
@@ -133,6 +146,7 @@ CREATE TABLE `event_comment_like` (
   PRIMARY KEY  (`event_comment_id`)
 );
 
+------Albums Table------
 CREATE TABLE `photo_albums` (
   `album_id` int(8) NOT NULL,
   `user_id`  int(6),
@@ -141,6 +155,7 @@ CREATE TABLE `photo_albums` (
   PRIMARY KEY(album_id),
   FOREIGN KEY(user_id) REFERENCES users(user_id)
 );
+
 
 -- make new user
 insert into photo_users values(0, "2014-09-09", "mike", "norris", "");
