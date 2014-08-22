@@ -156,8 +156,10 @@ CREATE TABLE `event_members` (
   `event_members_id` int(8) NOT NULL,
   `joindate` date,
   `event_id` int(6),
+  `user_id` int(6),
   PRIMARY KEY(event_members_id),
-  FOREIGN KEY(event_id) REFERENCES events(event_id)
+  FOREIGN KEY(event_id) REFERENCES events(event_id),
+  FOREIGN KEY(user_id) REFERENCES photo_users(user_id)
 );
 
 CREATE TABLE `event_comment_like` (
