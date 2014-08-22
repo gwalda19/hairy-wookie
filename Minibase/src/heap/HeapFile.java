@@ -382,7 +382,7 @@ public class HeapFile implements GlobalConst {
 						  //check if head dirpage, if so dont delete
 						  if (curPageId.pid == headId.pid)
 						  {
-							  // Unpin and free the current dir page.
+							  // Unpin the head dir page.
 							  Minibase.BufferManager.unpinPage(curPageId, UNPIN_CLEAN);
 							  break;
 						  }
@@ -403,7 +403,7 @@ public class HeapFile implements GlobalConst {
 								//set prevpage of child to prevpage of current dirpage
 								childDirPage.setPrevPage(dirPage.getPrevPage());
 								
-								//unpin childpage
+								//unpin child page
 								Minibase.BufferManager.unpinPage(dirPage.getNextPage(), UNPIN_DIRTY);
 							  }
 							  //unpin parent page
@@ -412,7 +412,7 @@ public class HeapFile implements GlobalConst {
 						  }
 						  
 						  //unpin & free empty dirpage
-						  Minibase.BufferManager.unpinPage(curPageId, UNPIN_CLEAN);
+						  Minibase.BufferManager.unpinPage(curPageId, UNPIN_DIRTY);
 						  Minibase.BufferManager.freePage(curPageId);
 						  break;
 					  }
@@ -421,7 +421,7 @@ public class HeapFile implements GlobalConst {
 				  
 		  }
       
-		  // Unpin and free the current dir page.
+		  // Unpin the current dir page.
 		  Minibase.BufferManager.unpinPage(curPageId, UNPIN_CLEAN);
 	  } while (dirId.pid != INVALID_PAGEID);
 
