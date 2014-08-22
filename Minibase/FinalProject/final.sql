@@ -26,7 +26,8 @@ CREATE TABLE `photo_users` (
   `username` varchar(20),
   `password` char(40),     
   `profile_pic_id` int(8), 
-  PRIMARY KEY  (`user_id`)
+  PRIMARY KEY  (`user_id`),
+  FOREIGN KEY(profile_pic_id) REFERENCES photo_files(photo_id)
 );
 
 CREATE TABLE `users_friend` (
@@ -47,13 +48,16 @@ CREATE TABLE `photo_files` (
   `filelocation` varchar(256),
   `album_id` int(8),
   PRIMARY KEY  (`photo_id`)
+  FOREIGN KEY(album_id) REFERENCES photo_albums(album_id)
 );
 
 CREATE TABLE `photo_user_links` (
   `connection_id` int(8) NOT NULL,
   `user_id` int(6),
   `photo_id` int(8),
-  PRIMARY KEY  (`connection_id`)
+  PRIMARY KEY  (`connection_id`),
+  FOREIGN KEY(user_id) REFERENCES photo_users(user_id),
+  FOREIGN KEY(photo_id) REFERENCES photo_files(photo_id)
 );
 
 CREATE TABLE `photo_comments` (
@@ -61,21 +65,27 @@ CREATE TABLE `photo_comments` (
   `user_id` int(6), 
   `photo_id` int(8),
   `comment_text` varchar(128),
-  PRIMARY KEY  (`comment_id`)
+  PRIMARY KEY  (`comment_id`),
+  FOREIGN KEY(user_id) REFERENCES photo_users(user_id),
+  FOREIGN KEY(photo_id) REFERENCES photo_files(photo_id)
 );
 
 CREATE TABLE `photo_like` (
   `connection_id` int(8) NOT NULL,
   `user_id` int(6),
   `photo_id` int(8),
-  PRIMARY KEY  (`connection_id`)
+  PRIMARY KEY  (`connection_id`),
+  FOREIGN KEY(user_id) REFERENCES photo_users(user_id),
+  FOREIGN KEY(photo_id) REFERENCES photo_files(photo_id)
 );
 
 CREATE TABLE `comment_like` (
   `connection_id` int(8) NOT NULL,
   `user_id` int(6),
   `comment_id` int(8),
-  PRIMARY KEY  (`connection_id`)
+  PRIMARY KEY  (`connection_id`),
+  FOREIGN KEY(user_id) REFERENCES photo_users(user_id),
+  FOREIGN KEY(comment_id) REFERENCES photo_comments(comment_id)
 );
 
 ------Groups Tables------
@@ -86,7 +96,9 @@ CREATE TABLE `user_group` (
   `groupname` varchar(20),  
   `profile_pic_id` int(8), 
   `about_text` varchar(128),
-  PRIMARY KEY  (`group_id`)
+  PRIMARY KEY  (`group_id`),
+  FOREIGN KEY(user_id) REFERENCES photo_users(user_id),
+  FOREIGN KEY(profile_pic_id) REFERENCES photo_files(photo_id)
 );
 
 CREATE TABLE `group_comments` (
@@ -94,15 +106,19 @@ CREATE TABLE `group_comments` (
   `user_id` int(6), 
   `group_id` int(6),
   `comment_text` varchar(128),
-  PRIMARY KEY  (`comment_id`)
+  PRIMARY KEY  (`comment_id`),
+  FOREIGN KEY(user_id) REFERENCES photo_users(user_id),
+  FOREIGN KEY(group_id) REFERENCES user_group(group_id)
 );
 
 CREATE TABLE `group_members` (
   `group_member_id` int(8) NOT NULL,
   `joindate` date,
   `group_id` int(6),
+  `user_id` int(6),
   PRIMARY KEY(group_member_id),
-  FOREIGN KEY(group_id) REFERENCES user_group(group_id)
+  FOREIGN KEY(group_id) REFERENCES user_group(group_id),
+  FOREIGN KEY(user_id) REFERENCES photo_users(user_id)
 );
 
 CREATE TABLE `group_comment_like` (
@@ -110,7 +126,8 @@ CREATE TABLE `group_comment_like` (
   `user_id` int(6),
   `group_comment_id` int(8),
   PRIMARY KEY  (`group_comment_like_id`),
-  FOREIGN KEY (group_comment_id) REFERENCES group_comments(comment_id)
+  FOREIGN KEY (group_comment_id) REFERENCES group_comments(comment_id),
+  FOREIGN KEY(user_id) REFERENCES photo_users(user_id)
 );
 
 ------Events Tables------
@@ -120,7 +137,9 @@ CREATE TABLE `events` (
   `eventname` varchar(20),
   `user_id` int(6),    
   `profile_pic_id` int(8), 
-  PRIMARY KEY  (`event_id`)
+  PRIMARY KEY  (`event_id`),
+  FOREIGN KEY(user_id) REFERENCES photo_users(user_id),
+  FOREIGN KEY(profile_pic_id) REFERENCES photo_files(photo_id)
 );
 
 CREATE TABLE `event_comments` (
@@ -128,22 +147,28 @@ CREATE TABLE `event_comments` (
   `user_id` int(6), 
   `event_id` int(6),
   `comment_text` varchar(128),
-  PRIMARY KEY  (`comment_id`)
+  PRIMARY KEY  (`comment_id`),
+  FOREIGN KEY(user_id) REFERENCES photo_users(user_id),
+  FOREIGN KEY(event_id) REFERENCES events(event_id)
 );
 
 CREATE TABLE `event_members` (
   `event_members_id` int(8) NOT NULL,
   `joindate` date,
   `event_id` int(6),
+  `user_id` int(6),
   PRIMARY KEY(event_members_id),
-  FOREIGN KEY(event_id) REFERENCES events(event_id)
+  FOREIGN KEY(event_id) REFERENCES events(event_id),
+  FOREIGN KEY(user_id) REFERENCES photo_users(user_id)
 );
 
 CREATE TABLE `event_comment_like` (
   `event_comment_id` int(8) NOT NULL,
   `user_id` int(6),
   `comment_id` int(8),
-  PRIMARY KEY  (`event_comment_id`)
+  PRIMARY KEY  (`event_comment_id`),
+  FOREIGN KEY(user_id) REFERENCES photo_users(user_id),
+  FOREIGN KEY(comment_id) REFERENCES event_comments(comment_id)
 );
 
 ------Albums Table------
