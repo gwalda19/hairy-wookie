@@ -31,10 +31,9 @@ CREATE TABLE `photo_users` (
 );
 
 CREATE TABLE `users_friend` (
-  `friend_id` integer PRIMARY KEY AUTOINCREMENT,
   `user_id` integer,
   `friend_user_id` integer,
-  UNIQUE (user_id, friend_user_id), 
+  PRIMARY KEY (user_id, friend_user_id), 
   FOREIGN KEY (user_id) REFERENCES photo_users(user_id),
   FOREIGN KEY (friend_user_id) REFERENCES photo_users(user_id)
 );
@@ -52,10 +51,9 @@ CREATE TABLE `photo_files` (
 );
 
 CREATE TABLE `photo_user_links` (
-  `connection_id` integer NOT NULL,
   `user_id` integer,
   `photo_id` integer,
-  PRIMARY KEY (connection_id),
+  PRIMARY KEY (user_id, photo_id),
   FOREIGN KEY (user_id) REFERENCES photo_users(user_id),
   FOREIGN KEY (photo_id) REFERENCES photo_files(photo_id)
 );
@@ -70,19 +68,17 @@ CREATE TABLE `photo_comments` (
 );
 
 CREATE TABLE `photo_like` (
-  `connection_id` integer PRIMARY KEY AUTOINCREMENT,
   `user_id` integer,
   `photo_id` integer,
-  UNIQUE (user_id, photo_id), 
+  PRIMARY KEY (user_id, photo_id), 
   FOREIGN KEY(user_id) REFERENCES photo_users(user_id),
   FOREIGN KEY(photo_id) REFERENCES photo_files(photo_id)
 );
 
 CREATE TABLE `comment_like` (
-  `connection_id` integer PRIMARY KEY AUTOINCREMENT,
   `user_id` integer,
   `comment_id` integer,
-  UNIQUE (user_id, comment_id), 
+  PRIMARY KEY (user_id, comment_id), 
   FOREIGN KEY (user_id) REFERENCES photo_users(user_id),
   FOREIGN KEY (comment_id) REFERENCES photo_comments(comment_id)
 );
@@ -120,10 +116,9 @@ CREATE TABLE `group_members` (
 );
 
 CREATE TABLE `group_comment_like` (
-  `group_comment_like_id` integer PRIMARY KEY AUTOINCREMENT,
   `user_id` integer,
   `group_comment_id` integer,
-  UNIQUE (user_id, group_comment_id), 
+  PRIMARY KEY (user_id, group_comment_id), 
   FOREIGN KEY (group_comment_id) REFERENCES group_comments(comment_id),
   FOREIGN KEY (user_id) REFERENCES photo_users(user_id)
 );
@@ -160,10 +155,9 @@ CREATE TABLE `event_members` (
 );
 
 CREATE TABLE `event_comment_like` (
-  `event_comment_id` integer PRIMARY KEY AUTOINCREMENT,
   `user_id` integer,
   `comment_id` integer,
-  UNIQUE (user_id, comment_id), 
+  PRIMARY KEY (user_id, comment_id), 
   FOREIGN KEY (user_id) REFERENCES photo_users(user_id),
   FOREIGN KEY (comment_id) REFERENCES event_comments(comment_id)
 );
