@@ -97,11 +97,10 @@ CREATE TABLE `group_comments` (
 );
 
 CREATE TABLE `group_members` (
-  `group_member_id` integer NOT NULL,
   `joindate` date,
   `group_id` integer,
   `user_id` integer,
-  PRIMARY KEY (group_member_id),
+  PRIMARY KEY (user_id, group_id),
   FOREIGN KEY (group_id) REFERENCES user_group(group_id),
   FOREIGN KEY (user_id) REFERENCES photo_users(user_id)
 );
@@ -119,10 +118,10 @@ CREATE TABLE `events` (
   `event_id` integer PRIMARY KEY AUTOINCREMENT,
   `eventdate` date,
   `eventname` varchar(20),
-  `user_id` integer,    
-  `profile_pic_id` integer, 
-  FOREIGN KEY (user_id) REFERENCES photo_users(user_id),
-  FOREIGN KEY (profile_pic_id) REFERENCES photo_files(photo_id)
+  `host_id` integer,  
+  `event_pic_id` integer, 
+  FOREIGN KEY (host_id) REFERENCES photo_users(user_id),
+  FOREIGN KEY (event_pic_id) REFERENCES photo_files(photo_id)
 );
 
 CREATE TABLE `event_comments` (
@@ -135,11 +134,10 @@ CREATE TABLE `event_comments` (
 );
 
 CREATE TABLE `event_members` (
-  `event_members_id` integer NOT NULL,
   `joindate` date,
   `event_id` integer,
   `user_id` integer,
-  PRIMARY KEY(event_members_id),
+  PRIMARY KEY(event_id, user_id),
   FOREIGN KEY(event_id) REFERENCES events(event_id),
   FOREIGN KEY(user_id) REFERENCES photo_users(user_id)
 );
@@ -154,12 +152,11 @@ CREATE TABLE `event_comment_like` (
 
 ------Albums Table------
 CREATE TABLE `photo_albums` (
-  `album_id` integer NOT NULL,
-  `user_id` integer,
+  `album_id` integer PRIMARY KEY AUTOINCREMENT,
+  `owner_id` integer,
   `name_of_album` varchar(128),
   `description` varchar(128),
-  PRIMARY KEY (album_id),
-  FOREIGN KEY (user_id) REFERENCES users(user_id)
+  FOREIGN KEY (owner_id) REFERENCES users(user_id)
 );
 
 COMMIT TRANSACTION;
