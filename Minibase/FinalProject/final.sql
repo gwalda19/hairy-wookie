@@ -43,12 +43,11 @@ CREATE TABLE `photo_files` (
   `uploadname` varchar(128),
   `caption` varchar(128),
   `filelocation` varchar(256),
-  `album_id` integer,
   `owner_id` integer,
+  `album_id` integer,
   FOREIGN KEY (album_id) REFERENCES photo_albums(album_id),
   FOREIGN KEY (owner_id) REFERENCES photo_users(user_id)
 );
-
 
 CREATE TABLE `photo_comments` (
   `comment_id` integer PRIMARY KEY AUTOINCREMENT,
