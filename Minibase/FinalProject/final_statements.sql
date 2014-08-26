@@ -1,8 +1,8 @@
 -- make new user
-insert into photo_users values(0, "2014-06-09", "Mike Norris", "password", NULL);
-insert into photo_users values(1, "2013-09-09", "Sean Fast", "password", NULL);
-insert into photo_users values(2, "2014-10-09", "Dave Shanline", "password", NULL);
-insert into photo_users values(3, "2011-07-09", "Bill Annocki", "password", NULL);
+insert into photo_users values(NULL, "2014-06-09", "Mike Norris", "password", NULL);
+insert into photo_users values(NULL, "2013-09-09", "Sean Fast", "password", NULL);
+insert into photo_users values(NULL, "2014-10-09", "Dave Shanline", "password", NULL);
+insert into photo_users values(NULL, "2011-07-09", "Bill Annocki", "password", NULL);
 
 
 -- make some friends
@@ -17,14 +17,8 @@ insert into users_friend values(3, 0);
   
 
 -- make new photo file
-insert into photo_files values(0, "2013-09-09", "somepic.jpg", "this is a caption", "/some/path/to/the/photo/pic.jpg", NULL);
-insert into photo_files values(1, "2014-10-10", "mypic.jpg", "me", "/usr/pic.jpg", NULL);
-
-
--- link users to photos
-insert into photo_user_links values(1, 0);
-insert into photo_user_links values(2, 1);
-
+insert into photo_files values(NULL, "2013-09-09", "somepic.jpg", "this is a caption", "/some/path/to/the/photo/pic.jpg", NULL);
+insert into photo_files values(NULL, "2014-10-10", "mypic.jpg", "me", "/usr/pic.jpg", NULL);
 
 -- make new photo likes
 insert into photo_like values(2, 1);
