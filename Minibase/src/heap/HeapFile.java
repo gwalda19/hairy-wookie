@@ -383,7 +383,7 @@ public class HeapFile implements GlobalConst {
 						  if (curPageId.pid == headId.pid)
 						  {
 							  // Unpin the head dir page.
-							  Minibase.BufferManager.unpinPage(curPageId, UNPIN_CLEAN);
+							  Minibase.BufferManager.unpinPage(curPageId, UNPIN_DIRTY);
 							  break;
 						  }
 						  else
@@ -391,7 +391,7 @@ public class HeapFile implements GlobalConst {
 							  //pin parent dirpage
 							  DirPage parentDirPage = new DirPage();
 							  Minibase.BufferManager.pinPage(dirPage.getPrevPage(), parentDirPage, PIN_DISKIO);
-							  //set nextpage of parent to nextpage of child of current dirpage
+							  //set nextpage of parent to nextpage of current dirpage
 							  parentDirPage.setNextPage(dirPage.getNextPage());
 							  
 							  if(dirPage.getNextPage().pid != INVALID_PAGEID)
@@ -424,9 +424,6 @@ public class HeapFile implements GlobalConst {
 		  // Unpin the current dir page.
 		  Minibase.BufferManager.unpinPage(curPageId, UNPIN_CLEAN);
 	  } while (dirId.pid != INVALID_PAGEID);
-
-
-
 
   }
 
