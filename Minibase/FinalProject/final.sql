@@ -46,17 +46,12 @@ CREATE TABLE `photo_files` (
   `caption` varchar(128),
   `filelocation` varchar(256),
   `album_id` integer,
-  PRIMARY KEY (photo_id)
-  FOREIGN KEY (album_id) REFERENCES photo_albums(album_id)
+  `owner_id` integer,
+  PRIMARY KEY (photo_id),
+  FOREIGN KEY (album_id) REFERENCES photo_albums(album_id),
+  FOREIGN KEY (owner_id) REFERENCES photo_users(user_id)
 );
 
-CREATE TABLE `photo_user_links` (
-  `user_id` integer,
-  `photo_id` integer,
-  PRIMARY KEY (user_id, photo_id),
-  FOREIGN KEY (user_id) REFERENCES photo_users(user_id),
-  FOREIGN KEY (photo_id) REFERENCES photo_files(photo_id)
-);
 
 CREATE TABLE `photo_comments` (
   `comment_id` integer PRIMARY KEY AUTOINCREMENT,
@@ -86,13 +81,13 @@ CREATE TABLE `comment_like` (
 ------Groups Tables------
 CREATE TABLE `user_group` (
   `group_id` integer NOT NULL,
-  `user_id` integer, 
-  `joindate` date,
+  `founder_id` integer, 
+  `foundingdate` date,
   `groupname` varchar(20),  
   `profile_pic_id` integer, 
   `about_text` varchar(128),
   PRIMARY KEY (group_id),
-  FOREIGN KEY (user_id) REFERENCES photo_users(user_id),
+  FOREIGN KEY (founder_id) REFERENCES photo_users(user_id),
   FOREIGN KEY (profile_pic_id) REFERENCES photo_files(photo_id)
 );
 
