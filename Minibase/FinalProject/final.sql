@@ -5,7 +5,6 @@ BEGIN TRANSACTION;
 DROP TABLE IF EXISTS photo_users;
 DROP TABLE IF EXISTS users_friend;
 DROP TABLE IF EXISTS photo_files;
-DROP TABLE IF EXISTS photo_user_links;
 DROP TABLE IF EXISTS photo_comments;
 DROP TABLE IF EXISTS photo_like;
 DROP TABLE IF EXISTS comment_like;
@@ -21,12 +20,11 @@ DROP TABLE IF EXISTS photo_albums;
 
 ------Users Tables------
 CREATE TABLE `photo_users` (
-  `user_id` integer NOT NULL,
+  `user_id` integer PRIMARY KEY AUTOINCREMENT,
   `joindate` date,
   `username` varchar(20),
   `password` char(40),     
   `profile_pic_id` integer, 
-  PRIMARY KEY (user_id),
   FOREIGN KEY (profile_pic_id) REFERENCES photo_files(photo_id)
 );
 
@@ -40,14 +38,13 @@ CREATE TABLE `users_friend` (
 
 ------Photo Tables------
 CREATE TABLE `photo_files` (
-  `photo_id` integer NOT NULL,
+  `photo_id` integer PRIMARY KEY AUTOINCREMENT,
   `uploaddate` date,
   `uploadname` varchar(128),
   `caption` varchar(128),
   `filelocation` varchar(256),
   `album_id` integer,
   `owner_id` integer,
-  PRIMARY KEY (photo_id),
   FOREIGN KEY (album_id) REFERENCES photo_albums(album_id),
   FOREIGN KEY (owner_id) REFERENCES photo_users(user_id)
 );
@@ -80,15 +77,14 @@ CREATE TABLE `comment_like` (
 
 ------Groups Tables------
 CREATE TABLE `user_group` (
-  `group_id` integer NOT NULL,
+  `group_id` integer PRIMARY KEY AUTOINCREMENT,
   `founder_id` integer, 
   `foundingdate` date,
   `groupname` varchar(20),  
-  `profile_pic_id` integer, 
+  `group_pic_id` integer, 
   `about_text` varchar(128),
-  PRIMARY KEY (group_id),
   FOREIGN KEY (founder_id) REFERENCES photo_users(user_id),
-  FOREIGN KEY (profile_pic_id) REFERENCES photo_files(photo_id)
+  FOREIGN KEY (group_pic_id) REFERENCES photo_files(photo_id)
 );
 
 CREATE TABLE `group_comments` (
@@ -120,12 +116,11 @@ CREATE TABLE `group_comment_like` (
 
 ------Events Tables------
 CREATE TABLE `events` (
-  `event_id` integer NOT NULL,
+  `event_id` integer PRIMARY KEY AUTOINCREMENT,
   `eventdate` date,
   `eventname` varchar(20),
   `user_id` integer,    
   `profile_pic_id` integer, 
-  PRIMARY KEY (event_id),
   FOREIGN KEY (user_id) REFERENCES photo_users(user_id),
   FOREIGN KEY (profile_pic_id) REFERENCES photo_files(photo_id)
 );
