@@ -155,7 +155,7 @@ CREATE TABLE `photo_albums` (
   `owner_id` integer,
   `name_of_album` varchar(128),
   `description` varchar(128),
-  FOREIGN KEY (owner_id) REFERENCES users(user_id)
+  FOREIGN KEY (owner_id) REFERENCES photo_users(user_id)
 );
 
 COMMIT TRANSACTION;
