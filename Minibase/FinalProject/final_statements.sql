@@ -71,6 +71,13 @@ insert into event_comment_like(user_id, comment_id) values (3, 1);
 insert into event_comment_like(user_id, comment_id) values (1, 1);
 
 
+-- make an  album and add some photos to it
+insert into photo_albums(owner_id, name_of_album, description) values (2, "Selfies", "Some of my best pics");
+update photo_files  set  album_id = 1 where photo_id = 2;
+update photo_files  set  album_id = 1 where photo_id = 3;
+
+
+
 SELECT * FROM photo_users;
 SELECT * FROM users_friend;
 SELECT * FROM photo_files;
@@ -85,6 +92,4 @@ SELECT * FROM events;
 SELECT * FROM event_members;
 SELECT * FROM event_comments;
 SELECT * FROM event_comment_like;
-
-
-
+SELECT * FROM photo_albums;
