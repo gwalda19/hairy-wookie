@@ -9,11 +9,11 @@ insert into photo_users (joindate, username, password) values ("2011-07-09", "Bi
 insert into users_friend values(1, 2);
 insert into users_friend values(2, 1);
 
-insert into users_friend values(2, 0);
-insert into users_friend values(0, 2);
+insert into users_friend values(2, 3);
+insert into users_friend values(3, 2);
 
-insert into users_friend values(0, 3);
-insert into users_friend values(3, 0);
+insert into users_friend values(4, 3);
+insert into users_friend values(3, 4);
   
 
 -- make new photo file
@@ -29,21 +29,21 @@ insert into photo_like values(3, 2);
 
 
 -- make new photo comments
-insert into photo_comments (user_id, photo_id, comment_text) values (0, 1, "This is a pic comment.");
+insert into photo_comments (user_id, photo_id, comment_text) values (1, 1, "This is a pic comment.");
 insert into photo_comments (user_id, photo_id, comment_text) values (1, 1, "This is another pic comment.");
 insert into photo_comments (user_id, photo_id, comment_text) values (2, 3, "I love it");
 
 
 -- make some photo comment likes
 insert into comment_like values(2, 2);
-insert into comment_like values(0, 2);
+insert into comment_like values(4, 2);
 insert into comment_like values(1, 1);
 
 
 -- make a group and add some members
 insert into user_group (founder_id, foundingdate, groupname, about_text) values (2, "2011-07-09", "YOLO", "You only live once");
-insert into group_members (group_id, user_id, joindate) values (0, 0, "2014-08-26");
-insert into group_members (group_id, user_id, joindate) values (0, 2, "2014-08-26");
+insert into group_members (group_id, user_id, joindate) values (1, 3, "2014-08-26");
+insert into group_members (group_id, user_id, joindate) values (1, 2, "2014-08-26");
 
 
 SELECT * FROM photo_users;
