@@ -46,6 +46,16 @@ insert into group_members (group_id, user_id, joindate) values (1, 3, "2014-08-2
 insert into group_members (group_id, user_id, joindate) values (1, 2, "2014-08-26");
 
 
+-- make some group comments
+insert into group_comments(user_id, group_id, comment_text) values (1, 1, "You wanted the best ... you got the best");
+insert into group_comments(user_id, group_id, comment_text) values (2, 1, "Prepare for titanfall");
+
+
+-- make some group comment likes
+insert into group_comment_like(user_id, group_comment_id) values (1, 1);
+insert into group_comment_like(user_id, group_comment_id) values (4, 2);
+
+
 SELECT * FROM photo_users;
 SELECT * FROM users_friend;
 SELECT * FROM photo_files;
@@ -54,4 +64,7 @@ SELECT * FROM photo_comments;
 SELECT * FROM comment_like;
 SELECT * FROM user_group;
 SELECT * FROM group_members;
+SELECT * FROM group_comments;
+SELECT * FROM group_comment_likes;
+
 
