@@ -56,6 +56,21 @@ insert into group_comment_like(user_id, group_comment_id) values (1, 1);
 insert into group_comment_like(user_id, group_comment_id) values (3, 2);
 
 
+-- make an  event and add some members
+insert into events(eventdate, eventname, host_id) values ("2014-28-08", "Final Project Presentation", 3);
+insert into event_members (event_id, user_id, joindate) values (1, 4, "2014-08-26");
+insert into event_members (event_id, user_id, joindate) values (1, 1, "2014-08-26");
+
+-- make some event comments
+insert into event_comments(user_id, event_id, comment_text) values (3, 1, "Its better to look good then to feel good");
+insert into event_comments(user_id, event_id, comment_text) values (4, 1, "Hello World");
+
+
+-- make some event  comment likes
+insert into event_comment_like(user_id, comment_id) values (3, 1);
+insert into event_comment_like(user_id, comment_id) values (1, 1);
+
+
 SELECT * FROM photo_users;
 SELECT * FROM users_friend;
 SELECT * FROM photo_files;
@@ -66,5 +81,10 @@ SELECT * FROM user_group;
 SELECT * FROM group_members;
 SELECT * FROM group_comments;
 SELECT * FROM group_comment_likes;
+SELECT * FROM events;
+SELECT * FROM event_members;
+SELECT * FROM event_comments;
+SELECT * FROM event_comment_like;
+
 
 
