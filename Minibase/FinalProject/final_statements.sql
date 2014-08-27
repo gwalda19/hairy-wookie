@@ -42,7 +42,7 @@ insert into comment_like values(1, 1);
 
 -- make a group and add some members
 insert into user_group (founder_id, foundingdate, groupname, about_text) values (2, "2011-07-09", "YOLO", "You only live once");
-insert into group_members (group_id, user_id, joindate) values (1, 3, "2014-08-26");
+insert into group_members (group_id, user_id, joindate) values (1, 1, "2014-08-26");
 insert into group_members (group_id, user_id, joindate) values (1, 2, "2014-08-26");
 
 
