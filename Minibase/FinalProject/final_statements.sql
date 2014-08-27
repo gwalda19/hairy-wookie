@@ -22,6 +22,7 @@ insert into photo_files (uploaddate, uploadname, caption, filelocation, owner_id
 insert into photo_files (uploaddate, uploadname, caption, filelocation, owner_id) values ("2012-07-23", "apic", "a thing", "/apic.jpg", 2);
 insert into photo_files (uploaddate, uploadname, caption, filelocation, owner_id) values ("2013-08-29", "pic", "you", "/usr/bin/pic.jpg", 3);
 
+
 -- make new photo likes
 insert into photo_like values(2, 1);
 insert into photo_like values(3, 1);
@@ -56,22 +57,23 @@ insert into group_comment_like(user_id, group_comment_id) values (1, 1);
 insert into group_comment_like(user_id, group_comment_id) values (3, 2);
 
 
--- make an  event and add some members
+-- make an event and add some members
 insert into events(eventdate, eventname, host_id) values ("2014-28-08", "Final Project Presentation", 3);
 insert into event_members (event_id, user_id, joindate) values (1, 4, "2014-08-26");
 insert into event_members (event_id, user_id, joindate) values (1, 1, "2014-08-26");
+
 
 -- make some event comments
 insert into event_comments(user_id, event_id, comment_text) values (3, 1, "Its better to look good then to feel good");
 insert into event_comments(user_id, event_id, comment_text) values (4, 1, "Hello World");
 
 
--- make some event  comment likes
+-- make some event comment likes
 insert into event_comment_like(user_id, comment_id) values (3, 1);
 insert into event_comment_like(user_id, comment_id) values (1, 1);
 
 
--- make an  album and add some photos to it
+-- make an album and add some photos to it
 insert into photo_albums(owner_id, name_of_album, description) values (2, "Selfies", "Some of my best pics");
 update photo_files  set  album_id = 1 where photo_id = 2;
 update photo_files  set  album_id = 1 where photo_id = 3;
