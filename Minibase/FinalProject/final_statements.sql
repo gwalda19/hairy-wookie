@@ -43,7 +43,7 @@ insert into comment_like values(1, 1);
 -- make a group and add some members
 insert into user_group (founder_id, foundingdate, groupname, about_text) values (2, "2011-07-09", "YOLO", "You only live once");
 insert into group_members (group_id, user_id, joindate) values (1, 1, "2014-08-26");
-insert into group_members (group_id, user_id, joindate) values (1, 2, "2014-08-26");
+insert into group_members (group_id, user_id, joindate) values (1, 3, "2014-08-26");
 
 
 -- make some group comments
@@ -53,7 +53,7 @@ insert into group_comments(user_id, group_id, comment_text) values (2, 1, "Prepa
 
 -- make some group comment likes
 insert into group_comment_like(user_id, group_comment_id) values (1, 1);
-insert into group_comment_like(user_id, group_comment_id) values (4, 2);
+insert into group_comment_like(user_id, group_comment_id) values (3, 2);
 
 
 SELECT * FROM photo_users;
