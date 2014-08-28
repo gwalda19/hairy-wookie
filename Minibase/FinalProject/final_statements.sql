@@ -102,7 +102,7 @@ SELECT * FROM comment_like;
 SELECT * FROM user_group;
 SELECT * FROM group_members;
 SELECT * FROM group_comments;
-SELECT * FROM group_comment_likes;
+SELECT * FROM group_comment_like;
 SELECT * FROM events;
 SELECT * FROM event_members;
 SELECT * FROM event_comments;
