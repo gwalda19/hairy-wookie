@@ -51,7 +51,7 @@ insert into photo_comments (user_id, photo_id, comment_text) values (3, 1, "some
 insert into comment_like values(2, 2);
 insert into comment_like values(4, 2);
 insert into comment_like values(1, 1);
-insert into comment_like values(4, 2);
+insert into comment_like values(4, 4);
 
 -- make a group and add some members
 insert into user_group (founder_id, foundingdate, groupname, about_text) values (2, "2011-07-09", "YOLO", "You only live once");
@@ -67,6 +67,8 @@ insert into group_comments(user_id, group_id, comment_text) values (2, 1, "Prepa
 -- make some group comment likes
 insert into group_comment_like(user_id, group_comment_id) values (1, 1);
 insert into group_comment_like(user_id, group_comment_id) values (3, 2);
+insert into group_comment_like(user_id, group_comment_id) values (4, 2);
+insert into group_comment_like(user_id, group_comment_id) values (4, 1);
 
 
 -- make an event and add some members
@@ -83,6 +85,7 @@ insert into event_comments(user_id, event_id, comment_text) values (4, 1, "Hello
 -- make some event comment likes
 insert into event_comment_like(user_id, comment_id) values (3, 1);
 insert into event_comment_like(user_id, comment_id) values (1, 1);
+insert into event_comment_like(user_id, comment_id) values (4, 1);
 
 
 -- make an album and add some photos to it
@@ -143,13 +146,13 @@ ON photo_users.user_id = group_members.user_id AND photo_users.user_id = event_m
 WHERE user_group.groupname = "YOLO" AND events.eventname = "Final Project Presentation";
 
 --List all users that are in group YOLO that are also friends.
-SELECT photo_users.username, user_group.groupname, users_friend.friend_user_id
-FROM photo_users
-INNER JOIN user_group
-INNER JOIN group_members
-INNER JOIN users_friend
-ON photo_users.user_id = group_members.user_id AND photo_users.user_id = users_friend.user_id
-WHERE user_group.groupname = "YOLO";
+--SELECT photo_users.username, user_group.groupname, users_friend.friend_user_id
+--FROM photo_users
+--INNER JOIN user_group
+--INNER JOIN group_members
+--INNER JOIN users_friend
+--ON photo_users.user_id = group_members.user_id AND photo_users.user_id = users_friend.user_id
+--WHERE user_group.groupname = "YOLO";
 
 --List all users that are friends of Sean Fast. (working)
 SELECT photo_users.username, users_friend.friend_user_id
@@ -159,7 +162,9 @@ ON photo_users.user_id = users_friend.user_id
 WHERE photo_users.username = "Sean Fast";
 
 --List all items that user Bill Annocki has liked
-SELECT *
+SELECT  photo_users.username   , photo_like.photo_id,
+        comment_like.comment_id, group_comment_like.group_comment_id,
+        event_comment_like.comment_id
 FROM photo_users
 INNER JOIN photo_like
 INNER JOIN comment_like
