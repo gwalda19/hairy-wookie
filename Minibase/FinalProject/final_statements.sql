@@ -33,6 +33,13 @@ insert into photo_files (uploaddate, uploadname, caption, filelocation, owner_id
 insert into photo_files (uploaddate, uploadname, caption, filelocation, owner_id) values ("2012-04-19", "cat2", "cat dancing", "/usr/bin/cat2.jpg", 2);
 insert into photo_files (uploaddate, uploadname, caption, filelocation, owner_id) values ("2012-04-19", "cat3", "cat and dog", "/usr/bin/cat3.jpg", 2);
 
+insert into photo_files (uploaddate, uploadname, caption, filelocation, owner_id) values ("2012-04-22", "dog", "dog chasing tail", "/usr/bin/dog.jpg", 5);
+insert into photo_files (uploaddate, uploadname, caption, filelocation, owner_id) values ("2012-04-22", "dog1", "catdog", "/usr/bin/dog1.jpg", 5);
+insert into photo_files (uploaddate, uploadname, caption, filelocation, owner_id) values ("2012-04-24", "meme", "Mr T", "/usr/bin/meme.jpg", 5);
+insert into photo_files (uploaddate, uploadname, caption, filelocation, owner_id) values ("2012-04-24", "meme1", "IBC", "/usr/bin/meme1.jpg", 5);
+insert into photo_files (uploaddate, uploadname, caption, filelocation, owner_id) values ("2012-04-25", "bomb", "Best Photo Bomb!", "/usr/bin/bomb.jpg", 5);
+insert into photo_files (uploaddate, uploadname, caption, filelocation, owner_id) values ("2012-04-25", "bomb1", "Check out the Cat", "/usr/bin/bomb1.jpg", 5);
+
 
 -- make new photo likes
 insert into photo_like values(2, 1);
@@ -69,6 +76,11 @@ insert into group_members (group_id, user_id, joindate) values (2, 3, "2014-08-3
 insert into group_members (group_id, user_id, joindate) values (2, 4, "2014-08-30");
 insert into group_members (group_id, user_id, joindate) values (2, 5, "2014-08-30");
 
+insert into user_group (founder_id, foundingdate, groupname, about_text) values (1, "2013-01-23", "Weapon Control Systems", "Group for members of WCS");
+insert into user_group (founder_id, foundingdate, groupname, about_text) values (6, "2011-07-14", "Santa's Elves", "All about building toys.");
+insert into user_group (founder_id, foundingdate, groupname, about_text) values (3, "2014-08-28", "Display Systems", "Group for members of ADS");
+
+
 -- make some group comments
 insert into group_comments(user_id, group_id, comment_text) values (1, 1, "You wanted the best ... you got the best");
 insert into group_comments(user_id, group_id, comment_text) values (2, 1, "Prepare for titanfall");
@@ -100,6 +112,10 @@ insert into event_members (event_id, user_id, joindate) values (2, 2, "2014-12-2
 insert into event_members (event_id, user_id, joindate) values (2, 3, "2014-12-26");
 insert into event_members (event_id, user_id, joindate) values (2, 6, "2014-12-26");
 
+insert into events(eventdate, eventname, host_id) values ("2015-04-30", "David's Birthday", 5);
+insert into events(eventdate, eventname, host_id) values ("2014-09-01", "Bill's Labor Day Party", 3);
+insert into events(eventdate, eventname, host_id) values ("2014-10-31", "Sean's Halloween Bash", 2);
+
 
 -- make some event comments
 insert into event_comments(user_id, event_id, comment_text) values (3, 1, "Its better to look good then to feel good");
@@ -128,6 +144,24 @@ update photo_files  set  album_id = 2 where photo_id = 5;
 update photo_files  set  album_id = 2 where photo_id = 6;
 update photo_files  set  album_id = 2 where photo_id = 7;
 update photo_files  set  album_id = 2 where photo_id = 8;
+
+insert into photo_albums(owner_id, name_of_album, description) values (5, "Dogs", "Some of the best dog pics");
+update photo_files  set  album_id = 3 where photo_id = 9;
+update photo_files  set  album_id = 3 where photo_id = 10;
+insert into photo_albums(owner_id, name_of_album, description) values (5, "Memes", "Some of the best meme pics on the net");
+update photo_files  set  album_id = 4 where photo_id = 11;
+update photo_files  set  album_id = 4 where photo_id = 12;
+insert into photo_albums(owner_id, name_of_album, description) values (5, "Photo Bombs", "Some of the best photo bombs on the net");
+update photo_files  set  album_id = 5 where photo_id = 13;
+update photo_files  set  album_id = 5 where photo_id = 14;
+
+
+-- Test some foreign key constraints
+update users_friend set friend_user_id = 8 where user_id = 3 AND friend_user_id = 2; --No user id 8
+update photo_files set owner_id = 8 where owner_id = 3;  --No user 8
+insert into group_members (group_id, user_id, joindate) values (7, 1, "2014-08-26");  --No group 7
+insert into event_comment_like(user_id, comment_id) values (6, 7);   --No comment 7
+insert into photo_albums(owner_id, name_of_album, description) values (8, "Fail", "This insert should fail");
 
 
 SELECT * FROM photo_users;
