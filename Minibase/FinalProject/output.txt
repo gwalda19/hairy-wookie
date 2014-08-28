@@ -1,0 +1,191 @@
+SQLite version 3.8.5 2014-06-04 14:06:34
+Enter ".help" for usage hints.
+Connected to a transient in-memory database.
+Use ".open FILENAME" to reopen on a persistent database.
+sqlite> .read test.sql
+
+------Constraint Checks------
+Error: near line 160: FOREIGN KEY constraint failed
+Error: near line 161: FOREIGN KEY constraint failed
+Error: near line 162: FOREIGN KEY constraint failed
+Error: near line 163: FOREIGN KEY constraint failed
+Error: near line 164: FOREIGN KEY constraint failed
+Error: near line 167: CHECK constraint failed: photo_users
+Error: near line 168: CHECK constraint failed: photo_users
+Error: near line 169: CHECK constraint failed: photo_users
+Error: near line 170: CHECK constraint failed: photo_files
+Error: near line 171: CHECK constraint failed: user_group
+Error: near line 174: UNIQUE constraint failed: photo_users.username
+Error: near line 175: UNIQUE constraint failed: user_group.groupname
+Error: near line 176: UNIQUE constraint failed: events.eventname
+
+------Print out all the tables------
+1|2014-06-09|Mike Norris|password||28
+2|2013-09-09|Sean Fast|password||30
+3|2014-10-09|Dave Shanline|password||30
+4|2011-07-09|Bill Annocki|password||35
+5|2012-04-18|David Gwalthney|radarRules||27
+6|2012-12-25|Santa Clause|xmasRoxs||100
+1|2
+2|1
+2|3
+3|2
+4|3
+3|4
+1|3
+3|1
+5|2
+2|5
+1|2013-09-09|somepic|this is a caption|/some/path/to/the/photo/somepic.jpg|1|
+2|2014-10-10|mypic|me|/home/mypic.jpg|2|1
+3|2012-07-23|apic|a thing|/apic.jpg|2|1
+4|2013-08-29|pic|you|/usr/bin/pic.jpg|3|
+5|2012-04-18|cat|picture of a cat|/usr/bin/cat.jpg|2|2
+6|2012-04-18|cat1|cat playing a piano|/usr/bin/cat1.jpg|2|2
+7|2012-04-19|cat2|cat dancing|/usr/bin/cat2.jpg|2|2
+8|2012-04-19|cat3|cat and dog|/usr/bin/cat3.jpg|2|2
+9|2012-04-22|dog|dog chasing tail|/usr/bin/dog.jpg|5|3
+10|2012-04-22|dog1|catdog|/usr/bin/dog1.jpg|5|3
+11|2012-04-24|meme|Mr T|/usr/bin/meme.jpg|5|4
+12|2012-04-24|meme1|IBC|/usr/bin/meme1.jpg|5|4
+13|2012-04-25|bomb|Best Photo Bomb!|/usr/bin/bomb.jpg|5|5
+14|2012-04-25|bomb1|Check out the Cat|/usr/bin/bomb1.jpg|5|5
+2|1
+3|1
+3|2
+4|6
+4|8
+1|1|1|This is a pic comment.
+2|1|1|This is another pic comment.
+3|2|3|I love it
+4|3|1|Awesome Picture!
+5|3|1|Your lying it is.
+6|3|1|somepic is great!
+2|2
+4|2
+1|1
+4|4
+4|1
+1|2|2011-07-09|YOLO||You only live once
+2|5|2014-08-28|Final Project||Database Final Project
+3|1|2013-01-23|Weapon Control Systems||Group for members of WCS
+4|6|2011-07-14|Santa's Elves||All about building toys.
+5|3|2014-08-28|Display Systems||Group for members of ADS
+2014-08-26|1|1
+2014-08-26|1|3
+2014-08-26|1|5
+2014-08-30|2|1
+2014-08-30|2|2
+2014-08-30|2|3
+2014-08-30|2|4
+2014-08-30|2|5
+1|1|1|You wanted the best ... you got the best
+2|2|1|Prepare for titanfall
+3|5|2|This final is awesome!
+4|1|2|How do we write SQL statements?
+5|2|2|Go to the tutorial.
+1|1
+3|2
+4|2
+4|1
+5|5
+4|5
+3|5
+1|2014-28-08|Final Project Presentation|3|
+2|2014-12-25|Santa's Workshop|6|
+3|2015-04-30|David's Birthday|5|
+4|2014-09-01|Bill's Labor Day Party|3|
+5|2014-10-31|Sean's Halloween Bash|2|
+2014-08-26|1|4
+2014-08-26|1|1
+2014-08-26|1|5
+2014-12-26|2|2
+2014-12-26|2|3
+2014-12-26|2|6
+1|3|1|Its better to look good then to feel good
+2|4|1|Hello World
+3|2|2|Where are we meeting up?
+4|3|2|Santa's Workshop duh!
+5|6|2|Yeah the North Pole.
+3|1
+1|1
+4|1
+2|4
+3|5
+6|4
+1|2|Selfies|Some of my best pics
+2|2|Cats|Some of the best cat pics
+3|5|Dogs|Some of the best dog pics
+4|5|Memes|Some of the best meme pics on the net
+5|5|Photo Bombs|Some of the best photo bombs on the net
+
+------Queries------
+Sean Fast|mypic
+Sean Fast|apic
+Sean Fast|cat
+Sean Fast|cat1
+Sean Fast|cat2
+Sean Fast|cat3
+Sean Fast|cat|Cats
+Sean Fast|cat1|Cats
+Sean Fast|cat2|Cats
+Sean Fast|cat3|Cats
+Dave Shanline|somepic|Awesome Picture!
+Dave Shanline|somepic|Your lying it is.
+Dave Shanline|somepic|somepic is great!
+Mike Norris|YOLO|Final Project Presentation
+Mike Norris|YOLO|Final Project Presentation
+Bill Annocki|YOLO|Final Project Presentation
+David Gwalthney|YOLO|Final Project Presentation
+David Gwalthney|YOLO|Final Project Presentation
+Sean Fast|YOLO|Final Project Presentation
+Dave Shanline|YOLO|Final Project Presentation
+Dave Shanline|YOLO|Final Project Presentation
+Mike Norris|YOLO|Sean Fast
+Mike Norris|YOLO|Sean Fast
+Sean Fast|YOLO|Mike Norris
+Sean Fast|YOLO|Mike Norris
+Sean Fast|YOLO|Dave Shanline
+Sean Fast|YOLO|Dave Shanline
+Dave Shanline|YOLO|Sean Fast
+Dave Shanline|YOLO|Sean Fast
+Bill Annocki|YOLO|Dave Shanline
+Bill Annocki|YOLO|Dave Shanline
+Dave Shanline|YOLO|Bill Annocki
+Dave Shanline|YOLO|Bill Annocki
+Mike Norris|YOLO|Dave Shanline
+Mike Norris|YOLO|Dave Shanline
+Mike Norris|YOLO|Dave Shanline
+Mike Norris|YOLO|Dave Shanline
+Dave Shanline|YOLO|Mike Norris
+Dave Shanline|YOLO|Mike Norris
+Dave Shanline|YOLO|Mike Norris
+Dave Shanline|YOLO|Mike Norris
+David Gwalthney|YOLO|Sean Fast
+David Gwalthney|YOLO|Sean Fast
+Sean Fast|YOLO|David Gwalthney
+Sean Fast|YOLO|David Gwalthney
+Sean Fast|Mike Norris
+Sean Fast|Dave Shanline
+Sean Fast|David Gwalthney
+Bill Annocki|6|1|1|1
+Bill Annocki|6|1|2|1
+Bill Annocki|6|1|5|1
+Bill Annocki|6|2|1|1
+Bill Annocki|6|2|2|1
+Bill Annocki|6|2|5|1
+Bill Annocki|6|4|1|1
+Bill Annocki|6|4|2|1
+Bill Annocki|6|4|5|1
+Bill Annocki|8|1|1|1
+Bill Annocki|8|1|2|1
+Bill Annocki|8|1|5|1
+Bill Annocki|8|2|1|1
+Bill Annocki|8|2|2|1
+Bill Annocki|8|2|5|1
+Bill Annocki|8|4|1|1
+Bill Annocki|8|4|2|1
+Bill Annocki|8|4|5|1
+
+
+sqlite>
