@@ -110,13 +110,9 @@ SELECT * FROM event_comment_like;
 SELECT * FROM photo_albums;
 
 -- List all photos that user 2 has posted.
-
---SELECT username, uploadname, caption, name_of_album
---FROM photo_users, photo_files, photo_albums
---WHERE photo_users.user_id = 2 & photo_album.album_id = 2;
 SELECT photo_users.username, photo_files.uploadname, photo_albums.name_of_album
 FROM photo_users, photo_files, photo_albums
-WHERE photo_users.user_id = 2;
+WHERE photo_users.user_id = 2 AND photo_albums.album_id = 2;
 
 
 
