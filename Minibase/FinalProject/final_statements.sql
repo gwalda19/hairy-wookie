@@ -4,6 +4,8 @@ insert into photo_users (joindate, username, password) values ("2013-09-09", "Se
 insert into photo_users (joindate, username, password) values ("2014-10-09", "Dave Shanline", "password");
 insert into photo_users (joindate, username, password) values ("2011-07-09", "Bill Annocki", "password");
 insert into photo_users (joindate, username, password) values ("2012-04-18", "David Gwalthney", "radar");
+insert into photo_users (joindate, username, password) values ("2012-12-25", "Santa Clause", "xmasRoxs");
+
 
 -- make some friends
 insert into users_friend values(1, 2);
@@ -37,7 +39,7 @@ insert into photo_like values(2, 1);
 insert into photo_like values(3, 1);
 insert into photo_like values(3, 2);
 insert into photo_like values(4, 6);
---insert into photo_like values(4, 8);
+insert into photo_like values(4, 8);
 
 -- make new photo comments
 insert into photo_comments (user_id, photo_id, comment_text) values (1, 1, "This is a pic comment.");
@@ -60,9 +62,20 @@ insert into group_members (group_id, user_id, joindate) values (1, 1, "2014-08-2
 insert into group_members (group_id, user_id, joindate) values (1, 3, "2014-08-26");
 insert into group_members (group_id, user_id, joindate) values (1, 5, "2014-08-26");
 
+insert into user_group (founder_id, foundingdate, groupname, about_text) values (5, "2014-08-28", "Final Project", "Database Final Project");
+insert into group_members (group_id, user_id, joindate) values (2, 1, "2014-08-30");
+insert into group_members (group_id, user_id, joindate) values (2, 2, "2014-08-30");
+insert into group_members (group_id, user_id, joindate) values (2, 3, "2014-08-30");
+insert into group_members (group_id, user_id, joindate) values (2, 4, "2014-08-30");
+insert into group_members (group_id, user_id, joindate) values (2, 5, "2014-08-30");
+
 -- make some group comments
 insert into group_comments(user_id, group_id, comment_text) values (1, 1, "You wanted the best ... you got the best");
 insert into group_comments(user_id, group_id, comment_text) values (2, 1, "Prepare for titanfall");
+
+insert into group_comments(user_id, group_id, comment_text) values (5, 2, "This final is awesome!");
+insert into group_comments(user_id, group_id, comment_text) values (1, 2, "How do we write SQL statements?");
+insert into group_comments(user_id, group_id, comment_text) values (2, 2, "Go to the tutorial.");
 
 
 -- make some group comment likes
@@ -71,6 +84,10 @@ insert into group_comment_like(user_id, group_comment_id) values (3, 2);
 insert into group_comment_like(user_id, group_comment_id) values (4, 2);
 insert into group_comment_like(user_id, group_comment_id) values (4, 1);
 
+insert into group_comment_like(user_id, group_comment_id) values (5, 5);
+insert into group_comment_like(user_id, group_comment_id) values (4, 5);
+insert into group_comment_like(user_id, group_comment_id) values (3, 5);
+
 
 -- make an event and add some members
 insert into events(eventdate, eventname, host_id) values ("2014-28-08", "Final Project Presentation", 3);
@@ -78,9 +95,19 @@ insert into event_members (event_id, user_id, joindate) values (1, 4, "2014-08-2
 insert into event_members (event_id, user_id, joindate) values (1, 1, "2014-08-26");
 insert into event_members (event_id, user_id, joindate) values (1, 5, "2014-08-26");
 
+insert into events(eventdate, eventname, host_id) values ("2014-12-25", "Santa's Workshop", 6);
+insert into event_members (event_id, user_id, joindate) values (2, 2, "2014-12-26");
+insert into event_members (event_id, user_id, joindate) values (2, 3, "2014-12-26");
+insert into event_members (event_id, user_id, joindate) values (2, 6, "2014-12-26");
+
+
 -- make some event comments
 insert into event_comments(user_id, event_id, comment_text) values (3, 1, "Its better to look good then to feel good");
 insert into event_comments(user_id, event_id, comment_text) values (4, 1, "Hello World");
+
+insert into event_comments(user_id, event_id, comment_text) values (2, 2, "Where are we meeting up?");
+insert into event_comments(user_id, event_id, comment_text) values (3, 2, "Santa's Workshop duh!");
+insert into event_comments(user_id, event_id, comment_text) values (6, 2, "Yeah the North Pole.");
 
 
 -- make some event comment likes
@@ -88,6 +115,9 @@ insert into event_comment_like(user_id, comment_id) values (3, 1);
 insert into event_comment_like(user_id, comment_id) values (1, 1);
 insert into event_comment_like(user_id, comment_id) values (4, 1);
 
+insert into event_comment_like(user_id, comment_id) values (2, 4);
+insert into event_comment_like(user_id, comment_id) values (3, 5);
+insert into event_comment_like(user_id, comment_id) values (6, 4);
 
 -- make an album and add some photos to it
 insert into photo_albums(owner_id, name_of_album, description) values (2, "Selfies", "Some of my best pics");
