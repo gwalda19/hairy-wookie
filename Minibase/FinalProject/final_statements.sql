@@ -50,7 +50,7 @@ insert into photo_comments (user_id, photo_id, comment_text) values (3, 1, "some
 insert into comment_like values(2, 2);
 insert into comment_like values(4, 2);
 insert into comment_like values(1, 1);
-
+insert into comment_like values(4, 2);
 
 -- make a group and add some members
 insert into user_group (founder_id, foundingdate, groupname, about_text) values (2, "2011-07-09", "YOLO", "You only live once");
@@ -142,25 +142,29 @@ ON photo_users.user_id = group_members.user_id AND photo_users.user_id = event_m
 WHERE user_group.groupname = "YOLO" AND events.eventname = "Final Project Presentation";
 
 --List all users that are in group YOLO that are also friends.
---SELECT photo_users.username, user_group.groupname, photo_users.username
---FROM photo_users
---INNER JOIN user_group
---INNER JOIN group_members
---INNER JOIN users_friend
---ON photo_users.user_id = group_members.user_id AND photo_users.user_id = users_friend.friend_user_id
---WHERE user_group.groupname = "YOLO";
+SELECT photo_users.username, user_group.groupname, users_friend.friend_user_id
+FROM photo_users
+INNER JOIN user_group
+INNER JOIN group_members
+INNER JOIN users_friend
+ON photo_users.user_id = group_members.user_id AND photo_users.user_id = users_friend.user_id
+WHERE user_group.groupname = "YOLO";
 
---List all users that are friends
-SELECT *
+--List all users that are friends of Sean Fast. (working)
+SELECT photo_users.username, users_friend.friend_user_id
 FROM users_friend
 INNER JOIN photo_users
-ON photo_users.user_id = users_friend.friend_user_id
+ON photo_users.user_id = users_friend.user_id
 WHERE photo_users.username = "Sean Fast";
 
 --List all items that user Bill Annocki has liked
---SELECT photo_users.username, 
+SELECT photo_users.username, photo_like.photo_id
+FROM photo_users
+INNER JOIN photo_like
+INNER JOIN comment_like
+INNER JOIN group_comment_like
+INNER JOIN event_comment_like
+ON photo_users.user_id = photo_like.user_id AND photo_users.user_id = comment_like.user_id
+   AND photo_users.user_id = group_comment_like.user_id AND photo_users.user_id = event_comment_like.user_id
+WHERE photo_users.username = "Bill Annocki";
 
---SELECT * FROM photo_like;
---SELECT * FROM comment_like;
---SELECT * FROM group_comment_like;
---SELECT * FROM event_comment_like;
