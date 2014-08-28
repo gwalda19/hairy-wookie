@@ -2,7 +2,6 @@ PRAGMA FOREIGN_KEYS = ON;
 
 BEGIN TRANSACTION;
 
-DROP TABLE IF EXISTS photo_users;
 DROP TABLE IF EXISTS users_friend;
 DROP TABLE IF EXISTS photo_files;
 DROP TABLE IF EXISTS photo_comments;
@@ -17,6 +16,7 @@ DROP TABLE IF EXISTS event_comments;
 DROP TABLE IF EXISTS event_members;
 DROP TABLE IF EXISTS event_comment_like;
 DROP TABLE IF EXISTS photo_albums;
+DROP TABLE IF EXISTS photo_users;
 
 ------Users Tables------
 CREATE TABLE `photo_users` (
