@@ -42,7 +42,9 @@ insert into photo_like values(3, 2);
 insert into photo_comments (user_id, photo_id, comment_text) values (1, 1, "This is a pic comment.");
 insert into photo_comments (user_id, photo_id, comment_text) values (1, 1, "This is another pic comment.");
 insert into photo_comments (user_id, photo_id, comment_text) values (2, 3, "I love it");
-
+insert into photo_comments (user_id, photo_id, comment_text) values (3, 1, "Awesome Picture!");
+insert into photo_comments (user_id, photo_id, comment_text) values (3, 1, "Your lying it is.");
+insert into photo_comments (user_id, photo_id, comment_text) values (3, 1, "somepic is great!");
 
 -- make some photo comment likes
 insert into comment_like values(2, 2);
@@ -113,7 +115,8 @@ SELECT * FROM photo_albums;
 SELECT photo_users.username, photo_files.uploadname
 FROM photo_users
 INNER JOIN photo_files
-ON photo_users.user_id = photo_files.owner_id AND photo_users.username = "Sean Fast";
+ON photo_users.user_id = photo_files.owner_id
+WHERE photo_users.username = "Sean Fast";
 
 -- List all photos that user Sean has posted in album Cats.
 --SELECT photo_users.username, photo_files.uploadname, photo_albums.name_of_album
@@ -125,7 +128,8 @@ SELECT photo_users.username, photo_files.uploadname, photo_comments.comment_text
 FROM photo_users
 INNER JOIN photo_files
 INNER JOIN photo_comments
-ON photo_users.username = "Dave Shanline"-- AND 
+ON photo_users.username = "Dave Shanline" AND photo_comments.user_id = photo_users.user_id
+WHERE photo_files.uploadname = "somepic";
 
 
 
