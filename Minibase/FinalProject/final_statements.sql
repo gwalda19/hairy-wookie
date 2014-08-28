@@ -56,7 +56,7 @@ insert into comment_like values(1, 1);
 insert into user_group (founder_id, foundingdate, groupname, about_text) values (2, "2011-07-09", "YOLO", "You only live once");
 insert into group_members (group_id, user_id, joindate) values (1, 1, "2014-08-26");
 insert into group_members (group_id, user_id, joindate) values (1, 3, "2014-08-26");
-
+insert into group_members (group_id, user_id, joindate) values (1, 5, "2014-08-26");
 
 -- make some group comments
 insert into group_comments(user_id, group_id, comment_text) values (1, 1, "You wanted the best ... you got the best");
@@ -72,7 +72,7 @@ insert into group_comment_like(user_id, group_comment_id) values (3, 2);
 insert into events(eventdate, eventname, host_id) values ("2014-28-08", "Final Project Presentation", 3);
 insert into event_members (event_id, user_id, joindate) values (1, 4, "2014-08-26");
 insert into event_members (event_id, user_id, joindate) values (1, 1, "2014-08-26");
-
+insert into event_members (event_id, user_id, joindate) values (1, 5, "2014-08-26");
 
 -- make some event comments
 insert into event_comments(user_id, event_id, comment_text) values (3, 1, "Its better to look good then to feel good");
@@ -123,13 +123,21 @@ WHERE photo_users.username = "Sean Fast";
 --FROM photo_users, photo_files, photo_albums
 --WHERE photo_users.user_id = photo_files.owner_id AND photo_users.username = "Sean Fast" AND photo_albums.name_of_album = "Cats";
 
---List all comments user Dave left on photo 1
+--List all comments user Dave left on photo somepic
 SELECT photo_users.username, photo_files.uploadname, photo_comments.comment_text
 FROM photo_users
 INNER JOIN photo_files
 INNER JOIN photo_comments
-ON photo_users.username = "Dave Shanline" AND photo_comments.user_id = photo_users.user_id
-WHERE photo_files.uploadname = "somepic";
+ON  photo_comments.photo_id = photo_files.photo_id AND photo_comments.user_id = photo_users.user_id
+WHERE photo_users.username = "Dave Shanline" AND photo_files.uploadname = "somepic";
 
-
+--List all users in group YOLO that are attending event Final Project Presentation
+SELECT photo_users.username, user_group.groupname, events.eventname
+FROM photo_users
+INNER JOIN user_group
+INNER JOIN events
+INNER JOIN group_members
+INNER JOIN event_members
+ON photo_users.user_id = group_members.user_id AND photo_users.user_id = event_members.user_id
+WHERE user_group.groupname = "YOLO" AND events.eventname = "Final Project Presentation";
 
