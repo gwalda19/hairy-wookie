@@ -109,10 +109,16 @@ SELECT * FROM event_comments;
 SELECT * FROM event_comment_like;
 SELECT * FROM photo_albums;
 
--- List all photos that user 2 has posted.
-SELECT photo_users.username, photo_files.uploadname, photo_albums.name_of_album
-FROM photo_users, photo_files, photo_albums
-WHERE photo_users.user_id = 2 AND photo_albums.album_id = 2;
+-- List all photos that user Sean has posted in a specific album (Cats)
+--SELECT photo_users.username, photo_files.uploadname, photo_albums.name_of_album
+--FROM photo_users, photo_files, photo_albums
+--WHERE photo_users.user_id = photo_albums.owner_id AND photo_albums.album_id = 2;
+
+SELECT photo_users.username, photo_files.uploadname
+FROM photo_users, photo_files
+WHERE photo_users.user_id = photo_files.owner_id AND photo_users.username = "Sean Fast";
+
+
 
 
 
