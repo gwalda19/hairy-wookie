@@ -22,7 +22,7 @@ DROP TABLE IF EXISTS photo_users;
 CREATE TABLE `photo_users` (
   `user_id` integer PRIMARY KEY AUTOINCREMENT,
   `joindate` date,
-  `username` varchar(20),
+  `username` varchar(20) UNIQUE,
   `password` char(40) CHECK (LENGTH(password) >= 8 AND LENGTH(password) <= 40),     
   `profile_pic_id` integer,
   `age` integer CHECK (age >= 15),
@@ -102,7 +102,7 @@ CREATE TABLE `user_group` (
   `group_id` integer PRIMARY KEY AUTOINCREMENT,
   `founder_id` integer, 
   `foundingdate` date,
-  `groupname` varchar(20) CHECK( LENGTH(groupname) >= 4),  
+  `groupname` varchar(20) CHECK( LENGTH(groupname) >= 4) UNIQUE,  
   `group_pic_id` integer, 
   `about_text` varchar(128),
   FOREIGN KEY (founder_id) REFERENCES photo_users(user_id)
@@ -155,7 +155,7 @@ CREATE TABLE `group_comment_like` (
 CREATE TABLE `events` (
   `event_id` integer PRIMARY KEY AUTOINCREMENT,
   `eventdate` date,
-  `eventname` varchar(20),
+  `eventname` varchar(20) UNIQUE,
   `host_id` integer,  
   `event_pic_id` integer, 
   FOREIGN KEY (host_id) REFERENCES photo_users(user_id)

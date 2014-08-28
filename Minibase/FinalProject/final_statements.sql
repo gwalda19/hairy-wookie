@@ -170,6 +170,11 @@ insert into photo_users (joindate, username, password, age) values ("2012-12-25"
 insert into photo_files (uploaddate, uploadname, caption, filelocation, owner_id) values ("2012-04-22", "a", "Fail", "Test", 5);  --Uploadname < 3
 insert into user_group (founder_id, foundingdate, groupname, about_text) values (1, "2013-01-23", "WCS", "Test Fail");  --Group name < 4
 
+-- Test Unique constraints
+insert into photo_users (joindate, username, password, age) values ("2012-12-25", "David Gwalthney", "TestFail", 16); --username not unique
+insert into user_group (founder_id, foundingdate, groupname, about_text) values (1, "2013-01-23", "YOLO", "Test Fail");  --Group name not unique
+insert into events(eventdate, eventname, host_id) values ("2016-04-30", "David's Birthday", 5);   --Event name already exists.
+
 
 SELECT * FROM photo_users;
 SELECT * FROM users_friend;
