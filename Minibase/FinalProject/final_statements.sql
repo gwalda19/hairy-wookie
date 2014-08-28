@@ -109,16 +109,23 @@ SELECT * FROM event_comments;
 SELECT * FROM event_comment_like;
 SELECT * FROM photo_albums;
 
--- List all photos that user Sean has posted in a specific album (Cats)
+--List all photos that user Sean has posted. (working)
+SELECT photo_users.username, photo_files.uploadname
+FROM photo_users
+INNER JOIN photo_files
+ON photo_users.user_id = photo_files.owner_id AND photo_users.username = "Sean Fast";
+
+-- List all photos that user Sean has posted in album Cats.
 --SELECT photo_users.username, photo_files.uploadname, photo_albums.name_of_album
 --FROM photo_users, photo_files, photo_albums
---WHERE photo_users.user_id = photo_albums.owner_id AND photo_albums.album_id = 2;
+--WHERE photo_users.user_id = photo_files.owner_id AND photo_users.username = "Sean Fast" AND photo_albums.name_of_album = "Cats";
 
-SELECT photo_users.username, photo_files.uploadname
-FROM photo_users, photo_files
-WHERE photo_users.user_id = photo_files.owner_id AND photo_users.username = "Sean Fast";
-
-
+--List all comments user Dave left on photo 1
+SELECT photo_users.username, photo_files.uploadname, photo_comments.comment_text
+FROM photo_users
+INNER JOIN photo_files
+INNER JOIN photo_comments
+ON photo_users.username = "Dave Shanline"-- AND 
 
 
 
