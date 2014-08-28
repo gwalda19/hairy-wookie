@@ -150,4 +150,17 @@ WHERE user_group.groupname = "YOLO" AND events.eventname = "Final Project Presen
 --ON photo_users.user_id = group_members.user_id AND photo_users.user_id = users_friend.friend_user_id
 --WHERE user_group.groupname = "YOLO";
 
+--List all users that are friends
+SELECT *
+FROM users_friend
+INNER JOIN photo_users
+ON photo_users.user_id = users_friend.friend_user_id
+WHERE photo_users.username = "Sean Fast";
 
+--List all items that user Bill Annocki has liked
+--SELECT photo_users.username, 
+
+--SELECT * FROM photo_like;
+--SELECT * FROM comment_like;
+--SELECT * FROM group_comment_like;
+--SELECT * FROM event_comment_like;
