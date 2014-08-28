@@ -36,7 +36,8 @@ insert into photo_files (uploaddate, uploadname, caption, filelocation, owner_id
 insert into photo_like values(2, 1);
 insert into photo_like values(3, 1);
 insert into photo_like values(3, 2);
-
+insert into photo_like values(4, 6);
+insert into photo_like values(4, 8);
 
 -- make new photo comments
 insert into photo_comments (user_id, photo_id, comment_text) values (1, 1, "This is a pic comment.");
@@ -158,13 +159,15 @@ ON photo_users.user_id = users_friend.user_id
 WHERE photo_users.username = "Sean Fast";
 
 --List all items that user Bill Annocki has liked
-SELECT photo_users.username, photo_like.photo_id
+SELECT *
 FROM photo_users
 INNER JOIN photo_like
 INNER JOIN comment_like
 INNER JOIN group_comment_like
 INNER JOIN event_comment_like
-ON photo_users.user_id = photo_like.user_id AND photo_users.user_id = comment_like.user_id
-   AND photo_users.user_id = group_comment_like.user_id AND photo_users.user_id = event_comment_like.user_id
+ON     photo_users.user_id = photo_like.user_id
+   AND photo_users.user_id = comment_like.user_id
+   AND photo_users.user_id = group_comment_like.user_id
+   AND photo_users.user_id = event_comment_like.user_id
 WHERE photo_users.username = "Bill Annocki";
 
