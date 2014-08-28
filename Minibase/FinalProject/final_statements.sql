@@ -169,7 +169,7 @@ INNER JOIN users_friend
 ON photo_users.user_id = users_friend.user_id AND users_friend.friend_user_id = temp_photo_users.user_id
 WHERE photo_users.username = "Sean Fast";
 
---List all items that user Bill Annocki has liked. (working, but double check)
+--List all items that user Bill Annocki has liked. (working)
 SELECT  photo_users.username   , photo_like.photo_id,
         comment_like.comment_id, group_comment_like.group_comment_id,
         event_comment_like.comment_id
