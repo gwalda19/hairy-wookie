@@ -123,7 +123,7 @@ WHERE photo_users.username = "Sean Fast";
 --FROM photo_users, photo_files, photo_albums
 --WHERE photo_users.user_id = photo_files.owner_id AND photo_users.username = "Sean Fast" AND photo_albums.name_of_album = "Cats";
 
---List all comments user Dave left on photo somepic
+--List all comments user Dave left on photo somepic.  (working)
 SELECT photo_users.username, photo_files.uploadname, photo_comments.comment_text
 FROM photo_users
 INNER JOIN photo_files
@@ -131,7 +131,7 @@ INNER JOIN photo_comments
 ON  photo_comments.photo_id = photo_files.photo_id AND photo_comments.user_id = photo_users.user_id
 WHERE photo_users.username = "Dave Shanline" AND photo_files.uploadname = "somepic";
 
---List all users in group YOLO that are attending event Final Project Presentation
+--List all users in group YOLO that are attending event Final Project Presentation. (working)
 SELECT photo_users.username, user_group.groupname, events.eventname
 FROM photo_users
 INNER JOIN user_group
@@ -140,4 +140,14 @@ INNER JOIN group_members
 INNER JOIN event_members
 ON photo_users.user_id = group_members.user_id AND photo_users.user_id = event_members.user_id
 WHERE user_group.groupname = "YOLO" AND events.eventname = "Final Project Presentation";
+
+--List all users that are in group YOLO that are also friends.
+--SELECT photo_users.username, user_group.groupname, photo_users.username
+--FROM photo_users
+--INNER JOIN user_group
+--INNER JOIN group_members
+--INNER JOIN users_friend
+--ON photo_users.user_id = group_members.user_id AND photo_users.user_id = users_friend.friend_user_id
+--WHERE user_group.groupname = "YOLO";
+
 
