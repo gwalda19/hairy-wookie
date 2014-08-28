@@ -23,8 +23,9 @@ CREATE TABLE `photo_users` (
   `user_id` integer PRIMARY KEY AUTOINCREMENT,
   `joindate` date,
   `username` varchar(20),
-  `password` char(40),     
-  `profile_pic_id` integer, 
+  `password` char(40) CHECK (LENGTH(password) >= 8 AND LENGTH(password) <= 40),     
+  `profile_pic_id` integer,
+  `age` integer CHECK (age >= 15),
   FOREIGN KEY (profile_pic_id) REFERENCES photo_files(photo_id) 
     ON DELETE SET NULL
 	  ON UPDATE CASCADE
@@ -46,7 +47,7 @@ CREATE TABLE `users_friend` (
 CREATE TABLE `photo_files` (
   `photo_id` integer PRIMARY KEY AUTOINCREMENT,
   `uploaddate` date,
-  `uploadname` varchar(128),
+  `uploadname` varchar(128) CHECK (LENGTH(uploadname) >= 3),
   `caption` varchar(128),
   `filelocation` varchar(256),
   `owner_id` integer,
@@ -101,7 +102,7 @@ CREATE TABLE `user_group` (
   `group_id` integer PRIMARY KEY AUTOINCREMENT,
   `founder_id` integer, 
   `foundingdate` date,
-  `groupname` varchar(20),  
+  `groupname` varchar(20) CHECK( LENGTH(groupname) >= 4),  
   `group_pic_id` integer, 
   `about_text` varchar(128),
   FOREIGN KEY (founder_id) REFERENCES photo_users(user_id)

@@ -1,10 +1,10 @@
 -- make new users
-insert into photo_users (joindate, username, password) values ("2014-06-09", "Mike Norris", "password");
-insert into photo_users (joindate, username, password) values ("2013-09-09", "Sean Fast", "password");
-insert into photo_users (joindate, username, password) values ("2014-10-09", "Dave Shanline", "password");
-insert into photo_users (joindate, username, password) values ("2011-07-09", "Bill Annocki", "password");
-insert into photo_users (joindate, username, password) values ("2012-04-18", "David Gwalthney", "radar");
-insert into photo_users (joindate, username, password) values ("2012-12-25", "Santa Clause", "xmasRoxs");
+insert into photo_users (joindate, username, password, age) values ("2014-06-09", "Mike Norris", "password", 28);
+insert into photo_users (joindate, username, password, age) values ("2013-09-09", "Sean Fast", "password", 30);
+insert into photo_users (joindate, username, password, age) values ("2014-10-09", "Dave Shanline", "password", 30);
+insert into photo_users (joindate, username, password, age) values ("2011-07-09", "Bill Annocki", "password", 35);
+insert into photo_users (joindate, username, password, age) values ("2012-04-18", "David Gwalthney", "radarRules", 27);
+insert into photo_users (joindate, username, password, age) values ("2012-12-25", "Santa Clause", "xmasRoxs", 100);
 
 
 -- make some friends
@@ -162,6 +162,13 @@ update photo_files set owner_id = 8 where owner_id = 3;  --No user 8
 insert into group_members (group_id, user_id, joindate) values (7, 1, "2014-08-26");  --No group 7
 insert into event_comment_like(user_id, comment_id) values (6, 7);   --No comment 7
 insert into photo_albums(owner_id, name_of_album, description) values (8, "Fail", "This insert should fail");
+
+-- Test Check constraints
+insert into photo_users (joindate, username, password, age) values ("2012-12-25", "John Robinson", "TestFail", 12); --Age < 15
+insert into photo_users (joindate, username, password, age) values ("2012-12-25", "John Robinson", "Fail", 22);  --Password < 8
+insert into photo_users (joindate, username, password, age) values ("2012-12-25", "John Robinson", "FailFailFailFailFailFailFailFailFailFailz", 22); --Password > 40
+insert into photo_files (uploaddate, uploadname, caption, filelocation, owner_id) values ("2012-04-22", "a", "Fail", "Test", 5);  --Uploadname < 3
+insert into user_group (founder_id, foundingdate, groupname, about_text) values (1, "2013-01-23", "WCS", "Test Fail");  --Group name < 4
 
 
 SELECT * FROM photo_users;
