@@ -123,10 +123,14 @@ INNER JOIN photo_files
 ON photo_users.user_id = photo_files.owner_id
 WHERE photo_users.username = "Sean Fast";
 
--- List all photos that user Sean has posted in album Cats.
---SELECT photo_users.username, photo_files.uploadname, photo_albums.name_of_album
---FROM photo_users, photo_files, photo_albums
---WHERE photo_users.user_id = photo_files.owner_id AND photo_users.username = "Sean Fast" AND photo_albums.name_of_album = "Cats";
+-- List all photos that user Sean has posted in album Cats. (working)
+SELECT photo_users.username, photo_files.uploadname, photo_albums.name_of_album
+FROM photo_users
+INNER JOIN photo_files
+INNER JOIN photo_albums
+ON    photo_users.user_id  = photo_albums.owner_id
+  AND photo_files.album_id = photo_albums.album_id
+WHERE photo_users.username = "Sean Fast" AND photo_albums.name_of_album = "Cats";
 
 --List all comments user Dave left on photo somepic.  (working)
 SELECT photo_users.username, photo_files.uploadname, photo_comments.comment_text
