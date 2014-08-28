@@ -25,15 +25,21 @@ CREATE TABLE `photo_users` (
   `username` varchar(20),
   `password` char(40),     
   `profile_pic_id` integer, 
-  FOREIGN KEY (profile_pic_id) REFERENCES photo_files(photo_id)
+  FOREIGN KEY (profile_pic_id) REFERENCES photo_files(photo_id) 
+    ON DELETE SET NULL
+	  ON UPDATE CASCADE
 );
 
 CREATE TABLE `users_friend` (
   `user_id` integer,
   `friend_user_id` integer,
   PRIMARY KEY (user_id, friend_user_id), 
-  FOREIGN KEY (user_id) REFERENCES photo_users(user_id),
+  FOREIGN KEY (user_id) REFERENCES photo_users(user_id)
+	  ON DELETE CASCADE
+	  ON UPDATE CASCADE,
   FOREIGN KEY (friend_user_id) REFERENCES photo_users(user_id)
+	  ON DELETE CASCADE
+	  ON UPDATE CASCADE  
 );
 
 ------Photo Tables------
@@ -45,8 +51,12 @@ CREATE TABLE `photo_files` (
   `filelocation` varchar(256),
   `owner_id` integer,
   `album_id` integer,
-  FOREIGN KEY (album_id) REFERENCES photo_albums(album_id),
+  FOREIGN KEY (album_id) REFERENCES photo_albums(album_id)
+	  ON DELETE CASCADE
+	  ON UPDATE CASCADE,
   FOREIGN KEY (owner_id) REFERENCES photo_users(user_id)
+	  ON DELETE CASCADE
+	  ON UPDATE CASCADE  
 );
 
 CREATE TABLE `photo_comments` (
@@ -54,24 +64,36 @@ CREATE TABLE `photo_comments` (
   `user_id` integer, 
   `photo_id` integer,
   `comment_text` varchar(128),
-  FOREIGN KEY(user_id) REFERENCES photo_users(user_id),
+  FOREIGN KEY(user_id) REFERENCES photo_users(user_id)
+	  ON DELETE CASCADE
+	  ON UPDATE CASCADE,
   FOREIGN KEY(photo_id) REFERENCES photo_files(photo_id)
+	  ON DELETE CASCADE
+	  ON UPDATE CASCADE  
 );
 
 CREATE TABLE `photo_like` (
   `user_id` integer,
   `photo_id` integer,
   PRIMARY KEY (user_id, photo_id), 
-  FOREIGN KEY(user_id) REFERENCES photo_users(user_id),
+  FOREIGN KEY(user_id) REFERENCES photo_users(user_id)
+	  ON DELETE CASCADE
+	  ON UPDATE CASCADE,
   FOREIGN KEY(photo_id) REFERENCES photo_files(photo_id)
+  	ON DELETE CASCADE
+	  ON UPDATE CASCADE  
 );
 
 CREATE TABLE `comment_like` (
   `user_id` integer,
   `comment_id` integer,
   PRIMARY KEY (user_id, comment_id), 
-  FOREIGN KEY (user_id) REFERENCES photo_users(user_id),
+  FOREIGN KEY (user_id) REFERENCES photo_users(user_id)
+  	ON DELETE CASCADE
+	  ON UPDATE CASCADE,
   FOREIGN KEY (comment_id) REFERENCES photo_comments(comment_id)
+    ON DELETE CASCADE
+	  ON UPDATE CASCADE
 );
 
 ------Groups Tables------
@@ -82,8 +104,12 @@ CREATE TABLE `user_group` (
   `groupname` varchar(20),  
   `group_pic_id` integer, 
   `about_text` varchar(128),
-  FOREIGN KEY (founder_id) REFERENCES photo_users(user_id),
+  FOREIGN KEY (founder_id) REFERENCES photo_users(user_id)
+    ON DELETE SET NULL
+	  ON UPDATE CASCADE,
   FOREIGN KEY (group_pic_id) REFERENCES photo_files(photo_id)
+  	ON DELETE SET NULL
+	  ON UPDATE CASCADE  
 );
 
 CREATE TABLE `group_comments` (
@@ -91,8 +117,12 @@ CREATE TABLE `group_comments` (
   `user_id` integer, 
   `group_id` integer,
   `comment_text` varchar(128),
-  FOREIGN KEY (user_id) REFERENCES photo_users(user_id),
+  FOREIGN KEY (user_id) REFERENCES photo_users(user_id)
+  	ON DELETE CASCADE
+	  ON UPDATE CASCADE,
   FOREIGN KEY (group_id) REFERENCES user_group(group_id)
+  	ON DELETE CASCADE
+	  ON UPDATE CASCADE  
 );
 
 CREATE TABLE `group_members` (
@@ -100,16 +130,24 @@ CREATE TABLE `group_members` (
   `group_id` integer,
   `user_id` integer,
   PRIMARY KEY (user_id, group_id),
-  FOREIGN KEY (group_id) REFERENCES user_group(group_id),
+  FOREIGN KEY (group_id) REFERENCES user_group(group_id)
+  	ON DELETE CASCADE
+	  ON UPDATE CASCADE,
   FOREIGN KEY (user_id) REFERENCES photo_users(user_id)
+  	ON DELETE CASCADE
+	  ON UPDATE CASCADE  
 );
 
 CREATE TABLE `group_comment_like` (
   `user_id` integer,
   `group_comment_id` integer,
   PRIMARY KEY (user_id, group_comment_id), 
-  FOREIGN KEY (group_comment_id) REFERENCES group_comments(comment_id),
+  FOREIGN KEY (group_comment_id) REFERENCES group_comments(comment_id)
+  	ON DELETE CASCADE
+	  ON UPDATE CASCADE,
   FOREIGN KEY (user_id) REFERENCES photo_users(user_id)
+  	ON DELETE CASCADE
+	  ON UPDATE CASCADE
 );
 
 ------Events Tables------
@@ -119,8 +157,12 @@ CREATE TABLE `events` (
   `eventname` varchar(20),
   `host_id` integer,  
   `event_pic_id` integer, 
-  FOREIGN KEY (host_id) REFERENCES photo_users(user_id),
+  FOREIGN KEY (host_id) REFERENCES photo_users(user_id)
+  	ON DELETE CASCADE
+	  ON UPDATE CASCADE,
   FOREIGN KEY (event_pic_id) REFERENCES photo_files(photo_id)
+  	ON DELETE SET NULL
+	  ON UPDATE CASCADE
 );
 
 CREATE TABLE `event_comments` (
@@ -128,8 +170,12 @@ CREATE TABLE `event_comments` (
   `user_id` integer, 
   `event_id` integer,
   `comment_text` varchar(128),
-  FOREIGN KEY (user_id) REFERENCES photo_users(user_id),
+  FOREIGN KEY (user_id) REFERENCES photo_users(user_id)
+  	ON DELETE CASCADE
+	  ON UPDATE CASCADE,
   FOREIGN KEY (event_id) REFERENCES events(event_id)
+  	ON DELETE CASCADE
+	  ON UPDATE CASCADE
 );
 
 CREATE TABLE `event_members` (
@@ -137,16 +183,24 @@ CREATE TABLE `event_members` (
   `event_id` integer,
   `user_id` integer,
   PRIMARY KEY(event_id, user_id),
-  FOREIGN KEY(event_id) REFERENCES events(event_id),
+  FOREIGN KEY(event_id) REFERENCES events(event_id)
+  	ON DELETE CASCADE
+	  ON UPDATE CASCADE,
   FOREIGN KEY(user_id) REFERENCES photo_users(user_id)
+  	ON DELETE CASCADE
+	  ON UPDATE CASCADE
 );
 
 CREATE TABLE `event_comment_like` (
   `user_id` integer,
   `comment_id` integer,
   PRIMARY KEY (user_id, comment_id), 
-  FOREIGN KEY (user_id) REFERENCES photo_users(user_id),
+  FOREIGN KEY (user_id) REFERENCES photo_users(user_id)
+  	ON DELETE CASCADE
+	  ON UPDATE CASCADE,
   FOREIGN KEY (comment_id) REFERENCES event_comments(comment_id)
+  	ON DELETE CASCADE
+	  ON UPDATE CASCADE
 );
 
 ------Albums Table------
@@ -156,6 +210,8 @@ CREATE TABLE `photo_albums` (
   `name_of_album` varchar(128),
   `description` varchar(128),
   FOREIGN KEY (owner_id) REFERENCES photo_users(user_id)
+  	ON DELETE CASCADE
+	  ON UPDATE CASCADE
 );
 
 COMMIT TRANSACTION;
