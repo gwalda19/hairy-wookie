@@ -37,7 +37,7 @@ insert into photo_like values(2, 1);
 insert into photo_like values(3, 1);
 insert into photo_like values(3, 2);
 insert into photo_like values(4, 6);
-insert into photo_like values(4, 8);
+--insert into photo_like values(4, 8);
 
 -- make new photo comments
 insert into photo_comments (user_id, photo_id, comment_text) values (1, 1, "This is a pic comment.");
@@ -52,6 +52,7 @@ insert into comment_like values(2, 2);
 insert into comment_like values(4, 2);
 insert into comment_like values(1, 1);
 insert into comment_like values(4, 4);
+insert into comment_like values(4, 1);
 
 -- make a group and add some members
 insert into user_group (founder_id, foundingdate, groupname, about_text) values (2, "2011-07-09", "YOLO", "You only live once");
@@ -155,13 +156,13 @@ WHERE user_group.groupname = "YOLO" AND events.eventname = "Final Project Presen
 --WHERE user_group.groupname = "YOLO";
 
 --List all users that are friends of Sean Fast. (working)
-SELECT photo_users.username, users_friend.friend_user_id
-FROM users_friend
-INNER JOIN photo_users
-ON photo_users.user_id = users_friend.user_id
+SELECT photo_users.username, temp_photo_users.username
+FROM photo_users, photo_users temp_photo_users
+INNER JOIN users_friend
+ON photo_users.user_id = users_friend.user_id AND users_friend.friend_user_id = temp_photo_users.user_id
 WHERE photo_users.username = "Sean Fast";
 
---List all items that user Bill Annocki has liked
+--List all items that user Bill Annocki has liked. (working, but double check)
 SELECT  photo_users.username   , photo_like.photo_id,
         comment_like.comment_id, group_comment_like.group_comment_id,
         event_comment_like.comment_id
@@ -175,4 +176,5 @@ ON     photo_users.user_id = photo_like.user_id
    AND photo_users.user_id = group_comment_like.user_id
    AND photo_users.user_id = event_comment_like.user_id
 WHERE photo_users.username = "Bill Annocki";
+
 
