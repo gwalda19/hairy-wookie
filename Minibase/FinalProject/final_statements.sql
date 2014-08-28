@@ -150,11 +150,11 @@ update photo_files  set  album_id = 2 where photo_id = 8;
 SELECT photo_users.username, user_group.groupname, temp_photo_users.username
 FROM photo_users, photo_users temp_photo_users
 INNER JOIN user_group
-INNER JOIN group_members
+INNER JOIN group_members, group_members temp_group_members
 INNER JOIN users_friend
 ON     photo_users.user_id = group_members.user_id
    AND photo_users.user_id = users_friend.user_id
-   AND users_friend.friend_user_id = group_members.user_id
+   AND users_friend.friend_user_id = temp_group_members.user_id
    AND users_friend.friend_user_id = temp_photo_users.user_id
 WHERE user_group.groupname = "YOLO";
 
